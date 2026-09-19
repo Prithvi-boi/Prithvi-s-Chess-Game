@@ -1,4 +1,4 @@
-function Board() {
+function Board({playAs}) {
     const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()    
     const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
     const darkSquares = []
@@ -10,7 +10,7 @@ function Board() {
     }    
 
     return (
-        <div className="h-[45%] w-[85%] bg-[#3A1A0C] border-4 border-[#634833] grid grid-cols-[2rem_auto_2em] grid-rows-[2rem_auto_2rem]">
+        <div className="h-[55%] w-[95%] bg-[#3A1A0C] border-4 border-[#634833] grid grid-cols-[2rem_auto_2em] grid-rows-[2rem_auto_2rem]">
             <div className="row-start-1 col-start-2 grid grid-cols-8 w-full text-white place-items-center">
                 {letters.map((elmt)=> <p key={elmt} className="rotate-180">{elmt}</p>)}
             </div>

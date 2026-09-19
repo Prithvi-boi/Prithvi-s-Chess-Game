@@ -1,9 +1,10 @@
-import Board from "./Component/Board"
+import LoginPage from "./Pages/LoginPage"
+
 function App() {
   return (
     <>
-      <div className="h-screen flex justify-center items-center">
-        <Board></Board>
+      <div>
+        <LoginPage />
       </div>
     </>
   )
