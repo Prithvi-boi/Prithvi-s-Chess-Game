@@ -56,7 +56,7 @@ export default function Navigation({ option }) {
 
             {/* Mobile or Tablet - SideBar */}
             <div className={`xl:hidden fixed inset-0 z-10 ${sideBar ? 'bg-black/50' : 'bg-black/0  pointer-events-none'} flex justify-end transition-all`}></div>
-            <div className={`xl:hidden flex flex-col fixed right-0  ${sideBar ? 'translate-x-0' : 'translate-x-full'} inset-y-0 w-40 max-w-[100vw] shadow-xl shadow-black bg-[#2C2A26] z-20 transition-all ease-in duration-75 gap-10 `}>
+            <div className={`xl:hidden flex flex-col fixed right-0  ${sideBar ? 'translate-x-0 shadow-xl shadow-black' : 'translate-x-full '} inset-y-0 w-40 max-w-[100vw] bg-[#2C2A26] z-20 transition-all ease-in duration-75 gap-10 `}>
                 <div className="ml-auto mx-10 block xl:hidden mt-10" onClick={() => setSideBar(prev => !prev)}>
                     <CrossIcon />
                 </div>
