@@ -1,10 +1,10 @@
-import LoginPage from "./Pages/LoginPage"
+import HomePage from "./Pages/HomePage"
 
 function App() {
   return (
     <>
       <div>
-        <LoginPage />
+        <HomePage />
       </div>
     </>
   )
