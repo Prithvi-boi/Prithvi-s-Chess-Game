@@ -15,8 +15,6 @@ import PlayBotIcon from "../Assets/Icons/Bot Icon.svg?react"
 function HomePage() {
     return (
         <>
-            {/* Heading */}
-            <Navigation option={'game'}/>
             {/* Main Section */}
             <div className="flex flex-col gap-5 mx-5 mt-10 md:mx-40 lg:mx-70 xl:gap-14">
 
