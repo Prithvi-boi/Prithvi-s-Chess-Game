@@ -6,7 +6,7 @@ import RatingPage from "./Pages/RatingPage"
 import { useState } from "react"
 
 function App() {
-  const [Nav, setNav] = useState("ratings")
+  const [Nav, setNav] = useState("game")
   const Page = () => {
     switch (Nav.toLocaleLowerCase()) {
       case "game": return <HomePage/>;

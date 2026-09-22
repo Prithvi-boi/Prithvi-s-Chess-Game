@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-export default function Button({ label, btnBg, logo, shadowbg }) {
+export default function Button({ label, btnBg, logo, shadowbg, oneClickOnly }) {
     const [Clicked, setClicked] = useState(false)
     function handleClick() {
         setClicked(prev => !prev)
@@ -10,8 +10,8 @@ export default function Button({ label, btnBg, logo, shadowbg }) {
     }
     return (
         <div>
-            <div className={`h-14 w-full rounded-lg ${shadowbg ? shadowbg : "bg-[#015e73] "}`} >
-                <button className={`${Clicked ? "bottom-0" : "bottom-2"} h-14 text-white w-full rounded-lg  text-xl font-bold relative  transition-all flex justify-evenly items-center ${btnBg ? btnBg : "bg-[#00819E]"}`}
+            <div className={` h-14 w-full rounded-lg ${shadowbg ? shadowbg : "bg-[#015e73] "} opacity-100`} >
+                <button className={` ${!oneClickOnly ? `${Clicked ? "bottom-0" : "bottom-2"}` : 'bottom-0 opacity-65'} h-14 text-white w-full rounded-lg text-xl font-bold relative  transition-all flex justify-evenly items-center ${btnBg ? btnBg : "bg-[#00819E]"}`}
                     onClick={handleClick}>
                         <div className="flex items-center gap-6">
                             {logo}{label}
