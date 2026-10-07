@@ -11,3 +11,11 @@ body {
   --font-instrument: "Instrument Serif", serif;
 }
 
+@theme{
+  --color-primary: #009E84
+}
+
+.boxBody{
+  @apply bg-[#252525] p-2 text-white
+}
+

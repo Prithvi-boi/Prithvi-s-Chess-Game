@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { setGameMode, setPlayAs } from "../slices/setGameMode.js"
 
 import ChessLogo from "../../public/Downloads/ChessLogo.png"
 import Button from "../Component/Button.jsx"
@@ -10,7 +12,6 @@ import StopwatchIcon from "../Assets/Icons/RatingsIcons/StopwatchIcon.svg?react"
 import LightingBoltIcon from "../Assets/Icons/RatingsIcons/LightingBoltIcon.svg?react"
 import SettingIcon from "../Assets/Icons/RatingsIcons/settingIcon.svg?react"
 import UsersIcon from "../Assets/Icons/Users.svg?react"
-
 
 import PlayOnlineIcon from "../Assets/Icons/Play Online Icon.svg?react"
 import PlayOfflineIcon from "../Assets/Icons/Players Icon.svg?react"
@@ -75,7 +76,10 @@ function HomePage() {
 }
 
 function PlayOffline_Section() {
-    const [PlayingAs, setPlayingAs] = useState('white')
+    const selectedCss = 'border-4 border-primary rounded-lg'
+    const dispatch = useDispatch()
+    const PlayingAs = useSelector((state) => state.gameMode.playas)
+    const gameMode = useSelector((state) => state.gameMode.value)
     return (
         <div className="mt-5 flex flex-col gap-4">
             {/* Select Game mode */}
@@ -83,12 +87,26 @@ function PlayOffline_Section() {
                 <h2 className="text-[#848484]text-xl">Game modes</h2>
                 <hr />
                 <div className="grid grid-cols-3 grid-rows-2 gap-2 text-white">
-                    <BoxCard Icon={<StopwatchIcon />} title={"Rapid"} />
-                    <BoxCard Icon={<LightingBoltIcon />} title={"Blitz"} />
-                    <BoxCard Icon={<BulletIcon />} title={"Bullet"} />
-                    <BoxCard Icon={<SettingIcon/>} title={"Custom"} styles={'col-span-3'}>
-                        <input type="number" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Value (in Min)"/>
-                    </BoxCard>
+                    <div onClick={()=> dispatch(setGameMode('rapid'))} className={`${gameMode == 'rapid' && selectedCss}`}>
+                        <BoxCard Icon={<StopwatchIcon />} title={"Rapid"}>
+                            <div className="rounded-sm border-2 border-[#989696] bg-[#838383]">10 min</div>
+                        </BoxCard>
+                    </div>
+                    <div onClick={()=> dispatch(setGameMode('blitz'))} className={`${gameMode == 'blitz' && selectedCss}`}>
+                        <BoxCard Icon={<LightingBoltIcon />} title={"Blitz"}>
+                            <div className="rounded-sm border-2 border-[#989696] bg-[#838383]">5 min</div>
+                        </BoxCard>
+                    </div>
+                    <div onClick={()=> dispatch(setGameMode('bullet'))} className={`${gameMode == 'bullet' && selectedCss}`}>
+                        <BoxCard Icon={<BulletIcon />} title={"Bullet"}>
+                            <div className="rounded-sm border-2 border-[#989696] bg-[#838383]">1 min</div>
+                        </BoxCard>
+                    </div>
+                    <div onClick={()=> dispatch(setGameMode('custom'))} className={`${gameMode == 'custom' && selectedCss} col-span-3`}>
+                        <BoxCard Icon={<SettingIcon/>} title={"Custom"}>
+                            <input type="number" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Value (in Min)"/>
+                        </BoxCard>
+                    </div>
                 </div>
             </div>
 
@@ -111,14 +129,14 @@ function PlayOffline_Section() {
                     <BoxCard Icon={<SettingIcon/>} title={"Play as"} styles={'col-span-3 items-start px-5 text-sm text-white w-full' }>
                         <div className="grid grid-cols-2 grid-rows-2 w-full gap-x-2 place-items-center">
                             <div className={`h-10 w-full rounded-xl grid grid-cols-2 bg-white text-gray-600`}>
-                                <button onClick={() => setPlayingAs('')} className={`bg-black rounded-l-xl relative`}>
+                                <button onClick={() => dispatch(setPlayAs('black'))} className={`bg-black rounded-l-xl relative`}>
                                     {PlayingAs ==='white' && <div className="bg-[#272727] rounded-l-xl w-full h-full absolute -top-2 "></div>}
                                 </button>
-                                <button onClick={() => setPlayingAs('white')} className={`bg-white rounded-r-xl relative`}>
-                                    {PlayingAs ==='' && <div className="bg-[#cecece] rounded-r-xl w-full h-full absolute -top-2 "></div>}
+                                <button onClick={() => dispatch(setPlayAs('white'))} className={`bg-[#cecece] rounded-r-xl relative`}>
+                                    {PlayingAs ==='black' && <div className=" bg-white rounded-r-xl w-full h-full absolute -top-2 "></div>}
                                 </button>
                             </div>
-                            <div className={`h-10 w-full rounded-xl grid place-items-center ${PlayingAs === 'white' ? 'bg-white text-gray-600': 'bg-black text-gray-400'} `}>{PlayingAs || 'black'}</div>
+                            <div className={`h-10 w-full rounded-xl grid place-items-center ${PlayingAs === 'white' ? 'bg-white text-gray-600': 'bg-black text-gray-400'} `}>{PlayingAs}</div>
                             <p>Player 1</p>
                             <p>Player 2</p>
                         </div>
