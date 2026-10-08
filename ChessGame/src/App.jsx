@@ -19,7 +19,7 @@ function App() {
     <>
       {/* Heading */}
       <Navigation option={Nav} NavCallback={(val) => setNav(val)} />
-      {Page()}
+      {Page()} 
     </>
   )
 }

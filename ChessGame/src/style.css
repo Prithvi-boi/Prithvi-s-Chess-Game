@@ -9,12 +9,15 @@ body {
 
 @theme {
   --font-instrument: "Instrument Serif", serif;
-}
+} 
 
 @theme{
-  --color-primary: #009E84
+  --color-primary: #009E84;
+  --color-background: #302E2B;
+  --color-bg-dark: #252525;
+  --color-soft-white: #D9D9D9;
 }
-
+ 
 .boxBody{
   @apply bg-[#252525] p-2 text-white
 }
