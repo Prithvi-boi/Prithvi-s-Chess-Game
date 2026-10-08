@@ -7,6 +7,7 @@ import RatingPage from "./Pages/RatingPage"
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./Pages/LoginPage"
+import GamePage from "./Pages/GamePage/GamePage"
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/home" element={<Home_Pages />} />
+        <Route path="/game" element={<GamePage />} />
       </Routes>
 
     </BrowserRouter>
@@ -35,7 +37,7 @@ function Home_Pages() {
     <>
       {/* Heading */}
       <Navigation option={Nav} NavCallback={(val) => setNav(val)} />
-      {Page()}
+      {Page()} 
     </>
   )
 }

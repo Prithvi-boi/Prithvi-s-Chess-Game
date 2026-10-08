@@ -8,12 +8,15 @@ import AppleLogo from '../../public/Downloads/appleLogo.svg?react'
 import GoogleLogo from '../../public/Downloads/googleLogo.svg?react'
 import FacebookLogo from '../../public/Downloads/facebookLogo.svg?react'
 
+import { useNavigate } from 'react-router-dom'
+
 export default function LoginPage() {
     const [rememberMe, setRememberMe] = useState(false)
     function handle_rememberMe() {
         setRememberMe(prev => !prev)
     }
 
+    const navigate = useNavigate()
     return (
         <div className="flex flex-col gap-5 mx-5 my-10 md:mx-40 lg:mx-70 xl:mx-120">
             <Logo style={"mx-auto"} />
@@ -34,7 +37,7 @@ export default function LoginPage() {
                             <p className="text-[#0297CE]">Forget Password?</p>
                         </div>
                     </div>
-                    <div onClick={() => console.log("Login")}>
+                    <div onClick={() => navigate('/home')}>
                         <Button label={"Login"} />
                     </div>
                     <div className="text-[#92918f] gap-4 flex items-center justify-center">

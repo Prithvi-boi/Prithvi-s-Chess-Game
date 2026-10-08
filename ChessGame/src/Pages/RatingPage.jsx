@@ -4,19 +4,22 @@ import StopwatchIcon from "../Assets/Icons/RatingsIcons/StopwatchIcon.svg?react"
 import LightingBoltIcon from "../Assets/Icons/RatingsIcons/LightingBoltIcon.svg?react"
 import GameHistory from "../Features/GameHistory"
 
-function BoxCard({ title, Icon }) {
+export function BoxCard({ title, Icon, styles, children, childValue }) {
     return (
-        <div className="flex flex-col gap-4 items-center bg-[#3D3D3D] p-2 w-full rounded-md">
+        <div className={`${styles} flex flex-col gap-4 items-center bg-[#3D3D3D] p-2 w-full rounded-md`}>
             <div className="flex gap-1 items-center">
                 {Icon &&
                     <div className="h-5 w-5 flex justify-center items-center">{Icon}</div>
                 }
                 <h4 className="text-[0.8em]">{title}</h4>
             </div>
-
-            <div className="border-2 font-bold border-[#949292] p-1 lg:p-3 w-full flex justify-center rounded-xl">
-                1000
+            {
+                children ? children :
+                <div className="border-2 font-bold border-[#949292] p-1 lg:p-3 w-full flex justify-center rounded-xl">
+                {childValue ? childValue : 1000}
             </div>
+            }
+            
         </div>
     )
 }
