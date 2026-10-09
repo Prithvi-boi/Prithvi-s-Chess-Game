@@ -22,3 +22,6 @@ body {
   @apply bg-[#252525] p-2 text-white
 }
 
+.basicBtn{
+  @apply text-soft-white rounded-md bg-stone-600 w-10 grid place-items-center 
+}
