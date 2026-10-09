@@ -84,7 +84,7 @@ export function MovesTracker() {
       <div className="h-100 overflow-y-scroll">
         {Move.map((val,i)=>{
           return(
-            <div className={`${i % 2 == 0 ? 'bg-background': 'bg-bg-dark'} flex gap-4 h-10 items-center px-5`}>
+            <div key={i} className={`${i % 2 == 0 ? 'bg-background': 'bg-bg-dark'} flex gap-4 h-10 items-center px-5`}>
               <p>{i}</p>
               <p>{val}</p>
             </div>
