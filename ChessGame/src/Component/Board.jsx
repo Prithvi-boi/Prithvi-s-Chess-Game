@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { createContext, useContext } from "react";
-import DefaultPieces from "./Pieces/DefaultPieces.jsx"
-
 const BoardContext = createContext();
 const useBoard = () => useContext(BoardContext);
 
+import DefaultPieces from "./Pieces/DefaultPieces.jsx"
+import MoveGen from "./Logic/MoveGen.js";
 
-function Board({ playAs = 'black' }) {
+function Board({ playAs = 'white' }) {
 
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -22,7 +22,10 @@ function Board({ playAs = 'black' }) {
     darkSquares = darkSquares.reverse()
   }
 
-
+  // --------------------- Game Logic
+  const [ClikedPiece, setClikedPiece] = useState()
+  const [ClikedPosition, setClikedPosition] = useState()
+  useEffect(() => MoveGen(ClikedPosition,ClikedPiece),[ClikedPiece,ClikedPosition])
 
   return (
     <div className={`w-full h-[100vw] bg-[#3A1A0C] border-y-4  border-[#634833] grid grid-cols-[1.5rem_auto_1.5em] grid-rows-[1.5rem_auto_1.5em]`}>
@@ -43,8 +46,8 @@ function Board({ playAs = 'black' }) {
             return (
               <div key={elmt} id={elmt}
                 className={`h-full w-full ${color} text-amber-950 flex justify-center items-center`}
-                onClick={(e) => { console.log(e.target.id) }}>
-                  <DefaultPieces elmt={elmt}/>
+                onClick={(e) => { setClikedPiece(e.currentTarget.children.item(0) != null  ? e.currentTarget.children.item(0).id : null), setClikedPosition(e.currentTarget.id) }}>
+                    <DefaultPieces elmt={elmt}/>
               </div>
             )
           })}
@@ -71,6 +74,5 @@ function Coords({ row, col, deg, grid_col, num }) {
     </div>
   )
 }
-
 
 export default Board

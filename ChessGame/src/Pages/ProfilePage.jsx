@@ -19,7 +19,7 @@ function ProfilePage() {
             <div className="flex flex-col justify-center gap-5 mx-5 mt-10 md:mx-20 lg:mx-60 xl:mx-110 xl:gap-14">
 
                 {/* Profile Section */}
-                <div className="rounded-md h-full w-full bg-[#252525] p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
+                <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
                     <h2 className="text-white text-xl">Profile</h2>
                     <hr />
                     {/* User Section */}
@@ -58,12 +58,12 @@ function ProfilePage() {
                     {/* Buttons */}
                     <div className="w-full flex justify-evenly">
                         <button className="xl:w-40 xl:h-10 p-2 w-20 text-[0.7em] text-white font-bold rounded-md bg-[#424242]">Cancle</button>
-                        <button className="xl:w-40 xl:h-10 p-2 w-20 text-[0.7em] text-white font-bold rounded-md bg-[#009E84]">Save</button>
+                        <button className="xl:w-40 xl:h-10 p-2 w-20 text-[0.7em] text-white font-bold rounded-md bg-primary">Save</button>
                     </div>
                 </div>
 
                 {/* Details Section */}
-                <div className="rounded-md h-full w-full bg-[#252525] p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
+                <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
                     <h2 className="text-white text-xl">Details</h2>
                     <hr />
                     {/* Form Section */}
@@ -113,7 +113,7 @@ function ProfilePage() {
                     {/* Buttons */}
                     <div className="w-full flex justify-evenly">
                         <button className="xl:w-40 xl:h-10 p-2 w-20 text-[0.7em] text-white font-bold rounded-md bg-[#424242]">Cancle</button>
-                        <button className="xl:w-40 xl:h-10 p-2 w-20 text-[0.7em] text-white font-bold rounded-md bg-[#009E84]">Save</button>
+                        <button className="xl:w-40 xl:h-10 p-2 w-20 text-[0.7em] text-white font-bold rounded-md bg-primary">Save</button>
                     </div>
                 </div>
             </div>

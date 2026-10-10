@@ -87,7 +87,7 @@ function PlayOffline_Section() {
     return (
         <div className="mt-5 flex flex-col gap-4">
             {/* Select Game mode */}
-            <div className="rounded-md h-full w-full bg-[#252525] p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
+            <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
                 <h2 className="text-[#848484]text-xl">Game modes</h2>
                 <hr />
                 <div className="grid grid-cols-3 grid-rows-2 gap-2 text-white">
@@ -115,7 +115,7 @@ function PlayOffline_Section() {
             </div>
 
             {/* Select Game mode */}
-            <div className="rounded-md h-full w-full bg-[#252525] p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
+            <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
                 <h2 className="text-[#848484] text-xl">Player Settings</h2>
                 <hr />
                 <div className="grid grid-cols-3 grid-rows-2 gap-2 w-full">
