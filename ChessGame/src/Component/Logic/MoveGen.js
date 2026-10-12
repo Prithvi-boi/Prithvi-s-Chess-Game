@@ -4,6 +4,13 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
     let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     let Moves = []
     const InsertMoves = (letter, number) => {
+        if (number > 8 || number < 1) {
+            return
+        }
+        if (letter == undefined) {
+            return
+        }
+        
         Moves.push(`${letter}${number}`)
     }
     if (position) {
@@ -55,6 +62,17 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
                     if (l + i < 8 && Number(posY) + i <= 8) { InsertMoves(letters[l + i], Number(posY) + i) }
                     if (l - i >= 0 && Number(posY) + i <= 8) { InsertMoves(letters[l - i], Number(posY) + i) }
                     if (l + i < 8 && Number(posY) - i > 0) { InsertMoves(letters[l + i], Number(posY) - i) }
+                }
+                break;
+
+            case 'N':
+                let j = 2
+                for (let i = 1; i <= 2; i++) {
+                    InsertMoves(letters[l - i], Number(posY) + j)
+                    InsertMoves(letters[l - i], Number(posY) - j)
+                    InsertMoves(letters[l + i], Number(posY) + j)
+                    InsertMoves(letters[l + i], Number(posY) - j)
+                    j = j - 1
                 }
                 break;
 
