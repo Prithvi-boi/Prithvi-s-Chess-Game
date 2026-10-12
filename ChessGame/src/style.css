@@ -29,3 +29,7 @@ body {
 .moveOverlay{
   @apply relative before:absolute before:inset-0 before:bg-green-500/30 before:pointer-events-none
 }
+
+.killOverlay{
+  @apply relative before:absolute before:inset-0 before:bg-red-500/30 before:pointer-events-none
+}

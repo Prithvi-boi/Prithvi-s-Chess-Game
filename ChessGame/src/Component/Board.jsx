@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createContext, useContext } from "react";
 const BoardContext = createContext();
 const useBoard = () => useContext(BoardContext);
@@ -28,9 +28,10 @@ function Board({ playAs = 'white' }) {
   useEffect(() => MoveGen(ClikedPosition,ClikedPiece, MoveGenCallback),[ClikedPiece,ClikedPosition])
 
   const [nextMoves, setNextMoves] = useState([])
-  const MoveGenCallback = (moves) => {
-    console.log(moves);
+  const [killables, setkillables] = useState([])
+  const MoveGenCallback = (moves,killables) => {
     setNextMoves(moves)
+    setkillables(killables)
   }
 
   return (
@@ -44,14 +45,14 @@ function Board({ playAs = 'white' }) {
 
       <div className="row-start-2 col-start-2 bg-[#3A1A0C] border-2 border-[#634833]">
         <div className=" grid grid-rows-8 grid-cols-8 h-full w-full bg-[#E9E9DF]">
-          {darkSquares.map((elmt, i) => {    
+          {darkSquares.map((elmt, i) => {                
             let num = Number(elmt[1])
             let color;
             if (num % 2 == 0) { color = i % 2 == 0 ? 'bg-[#E9E9DF]' : 'bg-[#BB9979]' }
             else { color = i % 2 == 0 ? 'bg-[#BB9979]' : 'bg-[#E9E9DF]' }
             return (
               <div key={elmt} id={elmt}
-                className={`h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} text-amber-950 flex justify-center items-center`}
+                className={`h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} ${killables.includes(elmt) ? 'killOverlay' : ''} text-amber-950 flex justify-center items-center`}
                 onClick={(e) => { setClikedPiece(e.currentTarget.children.item(0) != null  ? e.currentTarget.children.item(0).id : null), setClikedPosition(e.currentTarget.id) }}>
                     <DefaultPieces elmt={elmt}/>
               </div>
