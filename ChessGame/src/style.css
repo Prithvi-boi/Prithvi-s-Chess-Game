@@ -25,3 +25,7 @@ body {
 .basicBtn{
   @apply text-soft-white rounded-md bg-stone-600 w-10 grid place-items-center 
 }
+
+.moveOverlay{
+  @apply relative before:absolute before:inset-0 before:bg-green-500/30 before:pointer-events-none
+}
