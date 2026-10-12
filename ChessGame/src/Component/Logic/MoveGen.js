@@ -63,6 +63,16 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
                 }
                 break;
 
+            case 'K':
+                for (let x = -1; x <= 1; x++) {
+                    for (let y = -1; y <= 1; y++) {
+                        if (x === 0 && y === 0) continue;
+                        InsertMoves(letters[l + x], Number(posY) + y
+                        );
+                    }
+                }
+                break;
+
             case 'N':
                 let j = 2
                 for (let i = 1; i <= 2; i++) {
