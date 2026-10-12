@@ -18,7 +18,7 @@ export default function DefaultPieces({ elmt }) {
         WhiteKing: ['e1'],
         WhiteQueen: ['d1'],
         WhiteBishop: ['c1', 'f1'],
-        WhiteKnight: ['d4', 'g1'],
+        WhiteKnight: ['b1', 'g1'],
         WhiteRook: ['a1', 'h1'],
         WhitePawn: ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
 

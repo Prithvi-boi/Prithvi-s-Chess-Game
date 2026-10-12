@@ -10,7 +10,7 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
         if (letter == undefined) {
             return
         }
-        
+
         Moves.push(`${letter}${number}`)
     }
     if (position) {
@@ -42,11 +42,10 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
 
             case 'B':
                 for (let i = 1; i <= 8; i++) {
-                    if (letters[l - i] == undefined && letters[l + i] == undefined) { break }
-                    if (l - i >= 0 && Number(posY) - i > 0) { InsertMoves(letters[l - i], Number(posY) - i) }
-                    if (l + i < 8 && Number(posY) + i <= 8) { InsertMoves(letters[l + i], Number(posY) + i) }
-                    if (l - i >= 0 && Number(posY) + i <= 8) { InsertMoves(letters[l - i], Number(posY) + i) }
-                    if (l + i < 8 && Number(posY) - i > 0) { InsertMoves(letters[l + i], Number(posY) - i) }
+                    InsertMoves(letters[l - i], Number(posY) - i)
+                    InsertMoves(letters[l + i], Number(posY) + i)
+                    InsertMoves(letters[l - i], Number(posY) + i)
+                    InsertMoves(letters[l + i], Number(posY) - i)
                 }
                 break;
 
@@ -57,11 +56,10 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
                 }
 
                 for (let i = 1; i <= 8; i++) {
-                    if (letters[l - i] == undefined && letters[l + i] == undefined) { break }
-                    if (l - i >= 0 && Number(posY) - i > 0) { InsertMoves(letters[l - i], Number(posY) - i) }
-                    if (l + i < 8 && Number(posY) + i <= 8) { InsertMoves(letters[l + i], Number(posY) + i) }
-                    if (l - i >= 0 && Number(posY) + i <= 8) { InsertMoves(letters[l - i], Number(posY) + i) }
-                    if (l + i < 8 && Number(posY) - i > 0) { InsertMoves(letters[l + i], Number(posY) - i) }
+                    InsertMoves(letters[l - i], Number(posY) - i)
+                    InsertMoves(letters[l + i], Number(posY) + i)
+                    InsertMoves(letters[l - i], Number(posY) + i)
+                    InsertMoves(letters[l + i], Number(posY) - i)
                 }
                 break;
 
