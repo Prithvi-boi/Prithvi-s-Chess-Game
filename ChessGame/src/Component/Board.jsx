@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changePosition } from "../slices/piecesPosition.js";
 import { createContext, useContext } from "react";
 const BoardContext = createContext();
 const useBoard = () => useContext(BoardContext);
@@ -7,7 +9,7 @@ import DefaultPieces from "./Pieces/DefaultPieces.jsx"
 import MoveGen from "./Logic/MoveGen.js";
 
 function Board({ playAs = 'white' }) {
-
+  const dispatch = useDispatch()
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
   let darkSquares = []
@@ -25,7 +27,16 @@ function Board({ playAs = 'white' }) {
   // --------------------- Game Logic
   const [ClikedPiece, setClikedPiece] = useState()
   const [ClikedPosition, setClikedPosition] = useState()
-  useEffect(() => MoveGen(ClikedPosition,ClikedPiece, MoveGenCallback),[ClikedPiece,ClikedPosition])
+  const [LastCliked, setLastCliked] = useState([])
+  useEffect(() => {
+    if (ClikedPiece != null) {
+      MoveGen(ClikedPosition,ClikedPiece, MoveGenCallback)
+      setLastCliked([ClikedPosition,ClikedPiece])
+    }else{
+      dispatch(changePosition([ClikedPosition,LastCliked]))
+    }
+
+  },[ClikedPiece,ClikedPosition])
 
   const [nextMoves, setNextMoves] = useState([])
   const [killables, setkillables] = useState([])
@@ -33,7 +44,6 @@ function Board({ playAs = 'white' }) {
     setNextMoves(moves)
     setkillables(killables)
   }
-
   return (
     <div className={`w-full h-[100vw] bg-[#3A1A0C] border-y-4  border-[#634833] grid grid-cols-[1.5rem_auto_1.5em] grid-rows-[1.5rem_auto_1.5em]`}>
       <BoardContext.Provider value={{ reverse: playAs === "white" }}>
@@ -53,7 +63,7 @@ function Board({ playAs = 'white' }) {
             return (
               <div key={elmt} id={elmt}
                 className={`h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} ${killables.includes(elmt) ? 'killOverlay' : ''} text-amber-950 flex justify-center items-center`}
-                onClick={(e) => { setClikedPiece(e.currentTarget.children.item(0) != null  ? e.currentTarget.children.item(0).id : null), setClikedPosition(e.currentTarget.id) }}>
+                onClick={(e) => { setClikedPiece(e.currentTarget.children.item(0) != null  ? e.currentTarget.children.item(0).id : null ), setClikedPosition(e.currentTarget.id) }}>
                     <DefaultPieces elmt={elmt}/>
               </div>
             )

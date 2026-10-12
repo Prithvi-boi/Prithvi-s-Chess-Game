@@ -12,23 +12,11 @@ import Black_Bishop from '../../Assets/Default Chess Pieces/Black_Bishop.svg?rea
 import Black_Knight from '../../Assets/Default Chess Pieces/Black_Rook-1.svg?react'
 import Black_Rook from '../../Assets/Default Chess Pieces/Black_Rook.svg?react'
 
+import { useDispatch, useSelector } from 'react-redux'
+
 export default function DefaultPieces({ elmt }) {
     const pieceSize = 'h-[10vw] w-full'
-    const piecesPosition = {
-        WhiteKing: ['e1'],
-        WhiteQueen: ['d4'],
-        WhiteBishop: ['c3', 'f1'],
-        WhiteKnight: ['b1', 'g1'],
-        WhiteRook: ['a1', 'h1'],
-        WhitePawn: ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
-
-        BlackKing: ['e8'],
-        BlackQueen: ['d8'],
-        BlackBishop: ['c8', 'f8'],
-        BlackKnight: ['b8', 'g8'],
-        BlackRook: ['a8', 'h8'],
-        BlackPawn: ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
-    }
+    const piecesPosition = useSelector(state => state.piecesPosition.value)
     elmt = elmt.toLowerCase()
     return (
         <>

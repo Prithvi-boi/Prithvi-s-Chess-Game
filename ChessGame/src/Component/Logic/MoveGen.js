@@ -1,27 +1,20 @@
-
+import { store } from '../../store'
 
 export default function MoveGen(position, Selected_piece, MoveGenCallback) {
     let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     let Moves = []
     let killables = []
-    const WhitePositions = {
-        WhiteKing: ['e1'],
-        WhiteQueen: ['d4'],
-        WhiteBishop: ['c3', 'f1'],
-        WhiteKnight: ['b1', 'g1'],
-        WhiteRook: ['a1', 'h1'],
-        WhitePawn: ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2']
-    }
 
-    const BlackPositions = {
-        BlackKing: ['e8'],
-        BlackQueen: ['d8'],
-        BlackBishop: ['c8', 'f8'],
-        BlackKnight: ['b8', 'g8'],
-        BlackRook: ['a8', 'h8'],
-        BlackPawn: ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
-    }
+    const s = (store.getState()).piecesPosition.value
 
+    const WhitePositions = Object.fromEntries(
+        Object.entries(s).filter(([key]) => key.startsWith("White"))
+    );
+
+    const BlackPositions = Object.fromEntries(
+        Object.entries(s).filter(([key]) => key.startsWith("Black"))
+    );
+    
     const InsertMoves = (letter, number, canCapture = true) => {
         if (number > 8 || number < 1 || letter == undefined) return false   // off board
         let value = `${letter}${number}`
@@ -38,8 +31,6 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
         Moves.push(value)
         return true   // empty: keep going
     }
-
-
 
     if (position) {
         const slide = (dx, dy) => {
