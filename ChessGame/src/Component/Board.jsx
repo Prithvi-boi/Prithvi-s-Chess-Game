@@ -28,19 +28,29 @@ function Board({ playAs = 'white' }) {
   const [ClikedPiece, setClikedPiece] = useState()
   const [ClikedPosition, setClikedPosition] = useState()
   const [LastCliked, setLastCliked] = useState([])
+  const [Turn, setTurn] = useState('W')
+  const handlePieceClick = (e) => {
+    setClikedPiece(e.currentTarget.children.item(0) != null ? e.currentTarget.children.item(0).id : null)
+    setClikedPosition(e.currentTarget.id)
+  }
   useEffect(() => {
-    if (ClikedPiece != null) {
-      MoveGen(ClikedPosition,ClikedPiece, MoveGenCallback)
-      setLastCliked([ClikedPosition,ClikedPiece])
-    }else{
-      dispatch(changePosition([ClikedPosition,LastCliked]))
+    if (ClikedPiece != null && ClikedPiece[0] == Turn) {
+      MoveGen(ClikedPosition, ClikedPiece, MoveGenCallback)
+      setLastCliked([ClikedPosition, ClikedPiece])
+    } else {
+      if (nextMoves.includes(ClikedPosition)) {        
+        setTurn(prev => prev == 'W' ? 'B' : 'W')
+        dispatch(changePosition([ClikedPosition, LastCliked]))
+        setNextMoves([])
+        setkillables([])
+      }
     }
 
-  },[ClikedPiece,ClikedPosition])
+  }, [ClikedPiece, ClikedPosition])
 
   const [nextMoves, setNextMoves] = useState([])
   const [killables, setkillables] = useState([])
-  const MoveGenCallback = (moves,killables) => {
+  const MoveGenCallback = (moves, killables) => {
     setNextMoves(moves)
     setkillables(killables)
   }
@@ -55,7 +65,7 @@ function Board({ playAs = 'white' }) {
 
       <div className="row-start-2 col-start-2 bg-[#3A1A0C] border-2 border-[#634833]">
         <div className=" grid grid-rows-8 grid-cols-8 h-full w-full bg-[#E9E9DF]">
-          {darkSquares.map((elmt, i) => {                
+          {darkSquares.map((elmt, i) => {
             let num = Number(elmt[1])
             let color;
             if (num % 2 == 0) { color = i % 2 == 0 ? 'bg-[#E9E9DF]' : 'bg-[#BB9979]' }
@@ -63,8 +73,8 @@ function Board({ playAs = 'white' }) {
             return (
               <div key={elmt} id={elmt}
                 className={`h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} ${killables.includes(elmt) ? 'killOverlay' : ''} text-amber-950 flex justify-center items-center`}
-                onClick={(e) => { setClikedPiece(e.currentTarget.children.item(0) != null  ? e.currentTarget.children.item(0).id : null ), setClikedPosition(e.currentTarget.id) }}>
-                    <DefaultPieces elmt={elmt}/>
+                onClick={(e) => { handlePieceClick(e) }}>
+                <DefaultPieces elmt={elmt} />
               </div>
             )
           })}
