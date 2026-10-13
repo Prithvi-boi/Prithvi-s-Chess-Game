@@ -9,14 +9,14 @@ const piecesPositionReducer = createSlice({
             WhiteBishop: ['c1', 'f1'],
             WhiteNight: ['b1', 'g1'],
             WhiteRook: ['a1', 'h1'],
-            WhitePawn: ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
+            WhitePawn: ['a7', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
 
             BlackKing: ['e8'],
             BlackQueen: ['d8'],
             BlackBishop: ['c8', 'f8'],
             BlackNight: ['b8', 'g8'],
-            BlackRook: ['a8', 'h8'],
-            BlackPawn: ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
+            BlackRook: ['b6', 'h8'],
+            BlackPawn: ['b5', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
         },
         castle: {
             White: {
@@ -112,8 +112,23 @@ const piecesPositionReducer = createSlice({
             c.left = false
             c.right = false
         },
+
+        handlePawnPromotion: (state, action) => {            
+            let color = action.payload[0][0]
+            let piece = action.payload[0][1]
+            for (const key in state.value) {                
+                const element = state.value[key];
+                if (key[0] == color && key[5] == piece){
+                   element.push(action.payload[1].toLowerCase()) 
+                }
+                if (key[0] == color && key[5] == 'P') {
+                    let i = element.indexOf(action.payload[1].toLowerCase())
+                    element[i] = ''
+                }
+            }
+        }
     }
 })
 
 export default piecesPositionReducer.reducer
-export const { changePosition, handleCastle } = piecesPositionReducer.actions
+export const { changePosition, handleCastle, handlePawnPromotion } = piecesPositionReducer.actions

@@ -30,7 +30,9 @@ function Board({ playAs = 'white' }) {
   const [LastCliked, setLastCliked] = useState([])
   const [lastMove, setLastMove] = useState(null)
   const [Turn, setTurn] = useState('W')
+  const [promotion, setPromotion] = useState([])
   const handlePieceClick = (e) => {
+    if (promotion[0] != null) return
     setClikedPiece(e.currentTarget.children.item(0) != null ? e.currentTarget.children.item(0).id : null)
     setClikedPosition(e.currentTarget.id)
   }
@@ -44,6 +46,10 @@ function Board({ playAs = 'white' }) {
         setTurn(prev => prev == 'W' ? 'B' : 'W')
         dispatch(changePosition([ClikedPosition, LastCliked]))
         dispatch(handleCastle([ClikedPosition[0], LastCliked]))
+        let lastrank = LastCliked[1][0] == 'W' ? '8' : '1'
+        if (LastCliked[1][1] == 'P' && ClikedPosition[1] == lastrank) {
+          setPromotion([<PawnPromotion color={LastCliked[1][0]} file={ClikedPosition} PromotionCallback={() => setPromotion([])}/>, ClikedPosition])
+        }
         setNextMoves([])
         setkillables([])
       }
@@ -75,9 +81,10 @@ function Board({ playAs = 'white' }) {
             else { color = i % 2 == 0 ? 'bg-[#BB9979]' : 'bg-[#E9E9DF]' }
             return (
               <div key={elmt} id={elmt}
-                className={`h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} ${killables.includes(elmt) ? 'killOverlay' : ''} text-amber-950 flex justify-center items-center`}
+                className={`relative h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} ${killables.includes(elmt) ? 'killOverlay' : ''} text-amber-950 flex justify-center items-center`}
                 onClick={(e) => { handlePieceClick(e) }}>
                 <DefaultPieces elmt={elmt} />
+                {(elmt == promotion[1] && promotion[0] != null) ? promotion[0] : null}
               </div>
             )
           })}
@@ -86,6 +93,45 @@ function Board({ playAs = 'white' }) {
     </div >
   )
 }
+
+
+import White_Queen from '../Assets/Default Chess Pieces/White_Queen.svg?react'
+import White_Bishop from '../Assets/Default Chess Pieces/White_Bishop.svg?react'
+import White_Knight from '../Assets/Default Chess Pieces/White_Knight.svg?react'
+import White_Rook from '../Assets/Default Chess Pieces/White_Rook.svg?react'
+
+import Black_Queen from '../Assets/Default Chess Pieces/Black_Queen.svg?react'
+import Black_Bishop from '../Assets/Default Chess Pieces/Black_Bishop.svg?react'
+import Black_Knight from '../Assets/Default Chess Pieces/Black_Rook-1.svg?react'
+import Black_Rook from '../Assets/Default Chess Pieces/Black_Rook.svg?react'
+
+import { handlePawnPromotion } from "../slices/piecesPosition.js";
+
+export function PawnPromotion({ color, file, PromotionCallback }) {
+  let pieceStyle = 'h-[10vw] w-full border border-black'
+  let positionStyle = ['A','B','C','D'].includes(file[0])
+  const dispatch = useDispatch()
+  
+  return (
+    <div className={`grid grid-cols-4 absolute h-[10vw] w-[30vw] bg-white border border-black -top-10 ${positionStyle ? 'left-0' : 'right-0'} z-50`}>
+      {color == 'W' ?
+        <>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['WQ',file])), PromotionCallback()}}><White_Queen className={pieceStyle} /> </div>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['WR',file])), PromotionCallback()}}><White_Rook className={pieceStyle} /></div>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['WN',file])), PromotionCallback()}}><White_Knight className={pieceStyle} /></div>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['WB',file])), PromotionCallback()}}><White_Bishop className={pieceStyle} /> </div>
+        </>
+        :
+        <>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['BQ',file])), PromotionCallback()}}><Black_Queen className={pieceStyle} /> </div>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['BR',file])), PromotionCallback()}}><Black_Rook className={pieceStyle} /></div>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['BN',file])), PromotionCallback()}}><Black_Knight className={pieceStyle} /></div>
+          <div onClick={() =>{dispatch(handlePawnPromotion(['BB',file])), PromotionCallback()}}><Black_Bishop className={pieceStyle} /> </div>
+        </>}
+    </div>
+  )
+}
+
 
 function Coords({ row, col, deg, grid_col, num }) {
   const { reverse } = useBoard()
