@@ -1,6 +1,6 @@
 import { store } from '../../store'
 
-export default function MoveGen(position, Selected_piece, MoveGenCallback) {
+export default function MoveGen(position, Selected_piece, MoveGenCallback, lastMove) {
     let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
     let Moves = []
     let killables = []
@@ -64,12 +64,32 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
             if (letter == undefined || number < 1 || number > 8) return   // off board
             let value = `${letter}${number}`
             const enemy = color == 'W' ? BlackPositions : WhitePositions
+            const key = color == 'W' ? 'BlackPawn' : 'WhitePawn'
 
-            for (const key in enemy) {
-                if (enemy[key].includes(value.toLowerCase())) {
-                    killables.push(value)   // enemy is there, so it can be captured
-                    return
-                }
+            if (enemy[key].includes(value.toLowerCase())) {
+                killables.push(value)   // enemy is there, so it can be captured
+                return
+            }
+        }
+
+        const checkEnPassant = (letter, rank, color, dir) => {
+            if (letter == undefined) return   // off board
+            const reqRank = color == 'W' ? 5 : 4
+            if (rank != reqRank) return       // pawn must be on its 5th rank
+
+            const pawnKey = color == 'W' ? 'BlackPawn' : 'WhitePawn'
+            const enemy = color == 'W' ? BlackPositions : WhitePositions
+            const value = `${letter}${rank}`          // the neighbor square
+            const captureSquare = `${letter}${rank + dir}`   // where our pawn lands
+
+            const justJumped =
+                lastMove &&
+                lastMove.piece[1] == 'P' &&
+                lastMove.to.toUpperCase() == value.toUpperCase() &&
+                Math.abs(Number(lastMove.from[1]) - Number(lastMove.to[1])) == 2
+
+            if (justJumped && enemy[pawnKey].includes(value.toLowerCase())) {
+                killables.push(captureSquare)
             }
         }
 
@@ -79,12 +99,14 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
             if (InsertMoves(posX, Number(posY) + dir, false)) {
                 if (posY == startRank) InsertMoves(posX, Number(posY) + 2 * dir, false)
             }
-            
+
             checkPawnCapture(letters[l - 1], Number(posY) + dir, color)
             checkPawnCapture(letters[l + 1], Number(posY) + dir, color)
+            checkEnPassant(letters[l - 1], Number(posY), color, dir)
+            checkEnPassant(letters[l + 1], Number(posY), color, dir)
         }
 
-        
+
 
         // Other pieces Moves
         switch (piece) {

@@ -28,6 +28,7 @@ function Board({ playAs = 'white' }) {
   const [ClikedPiece, setClikedPiece] = useState()
   const [ClikedPosition, setClikedPosition] = useState()
   const [LastCliked, setLastCliked] = useState([])
+  const [lastMove, setLastMove] = useState(null)
   const [Turn, setTurn] = useState('W')
   const handlePieceClick = (e) => {
     setClikedPiece(e.currentTarget.children.item(0) != null ? e.currentTarget.children.item(0).id : null)
@@ -35,10 +36,11 @@ function Board({ playAs = 'white' }) {
   }
   useEffect(() => {
     if (ClikedPiece != null && ClikedPiece[0] == Turn) {
-      MoveGen(ClikedPosition, ClikedPiece, MoveGenCallback)
+      MoveGen(ClikedPosition, ClikedPiece, MoveGenCallback, lastMove)
       setLastCliked([ClikedPosition, ClikedPiece])
     } else {
-      if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {        
+      if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
+        setLastMove({ piece: LastCliked[1], from: LastCliked[0], to: ClikedPosition })
         setTurn(prev => prev == 'W' ? 'B' : 'W')
         dispatch(changePosition([ClikedPosition, LastCliked]))
         setNextMoves([])
