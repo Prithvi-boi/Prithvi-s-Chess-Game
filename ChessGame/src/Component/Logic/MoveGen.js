@@ -64,11 +64,11 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
             if (letter == undefined || number < 1 || number > 8) return   // off board
             let value = `${letter}${number}`
             const enemy = color == 'W' ? BlackPositions : WhitePositions
-            const key = color == 'W' ? 'BlackPawn' : 'WhitePawn'
-
-            if (enemy[key].includes(value.toLowerCase())) {
-                killables.push(value)   // enemy is there, so it can be captured
-                return
+            for (const key in enemy) {                                
+                if (enemy[key].includes(value.toLowerCase())) {
+                    killables.push(value)   // enemy is there, so it can be captured
+                    return
+                }
             }
         }
 

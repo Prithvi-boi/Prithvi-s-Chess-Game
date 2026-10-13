@@ -9,27 +9,27 @@ body {
 
 @theme {
   --font-instrument: "Instrument Serif", serif;
-} 
+}
 
-@theme{
+@theme {
   --color-primary: #009E84;
   --color-background: #302E2B;
   --color-bg-dark: #252525;
   --color-soft-white: #D9D9D9;
 }
- 
-.boxBody{
+
+.boxBody {
   @apply bg-[#252525] p-2 text-white
 }
 
-.basicBtn{
-  @apply text-soft-white rounded-md bg-stone-600 w-10 grid place-items-center 
+.basicBtn {
+  @apply text-soft-white rounded-md bg-stone-600 w-10 grid place-items-center
 }
 
-.moveOverlay{
-  @apply relative before:absolute before:inset-0 before:bg-green-500/30 before:pointer-events-none
+.moveOverlay {
+  @apply relative before:absolute before:inset-0 before:bg-green-500/30 before:pointer-events-none after:absolute after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-green-800/20 after:pointer-events-none after:h-4 after:w-4;
 }
 
-.killOverlay{
+.killOverlay {
   @apply relative before:absolute before:inset-0 before:bg-red-500/30 before:pointer-events-none
 }
