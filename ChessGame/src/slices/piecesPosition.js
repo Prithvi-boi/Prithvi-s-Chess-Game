@@ -17,11 +17,35 @@ const piecesPositionReducer = createSlice({
             BlackNight: ['b8', 'g8'],
             BlackRook: ['a8', 'h8'],
             BlackPawn: ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
+        },
+        castle: {
+            White: {
+                right: true,
+                left: true
+            },
+            Black: {
+                right: true,
+                left: true
+            },
         }
     },
     reducers: {
         changePosition: (state, action) => {
             const target = action.payload;
+            // Castle Logic
+            if (target[1][1][1] == 'R') {
+                let key = target[1][1][0] == 'W' ? 'WhiteRook' : 'BlackRook'
+                let c = target[1][1][0] == 'W' ? state.castle.White : state.castle.Black
+                const element = state.value[key];
+                let j = target[1][0].toLowerCase()
+                if (element.includes(j)) {
+                    const i = element.indexOf(j);
+                    if (i == 0) c.left = false
+                    if (i == 1) c.right = false
+                }
+
+            }
+
 
             // En Passant Capture
             if (target[1][1][1] == 'P') {
@@ -62,9 +86,34 @@ const piecesPositionReducer = createSlice({
                     break
                 }
             }
-        }
+        },
+
+        handleCastle: (state, action) => {
+            if (action.payload[1][1][1] != 'K') return
+
+            const color = action.payload[1][1][0]
+            const fromFile = action.payload[1][0][0]   // file the king left
+            const rank = action.payload[1][0][1]
+            const toFile = action.payload[0]           // file the king landed on
+            const element = state.value[color == 'W' ? 'WhiteRook' : 'BlackRook']
+
+            // rook jumps ONLY when the king moved two files from E
+            if (fromFile == 'E' && toFile == 'C') {
+                const j = element.indexOf(`a${rank}`)
+                if (j !== -1) element[j] = `d${rank}`
+            }
+            if (fromFile == 'E' && toFile == 'G') {
+                const j = element.indexOf(`h${rank}`)
+                if (j !== -1) element[j] = `f${rank}`
+            }
+
+            // any king move loses both castle rights
+            const c = color == 'W' ? state.castle.White : state.castle.Black
+            c.left = false
+            c.right = false
+        },
     }
 })
 
 export default piecesPositionReducer.reducer
-export const { changePosition } = piecesPositionReducer.actions
+export const { changePosition, handleCastle } = piecesPositionReducer.actions

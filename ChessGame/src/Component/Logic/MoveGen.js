@@ -6,6 +6,7 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
     let killables = []
 
     const s = (store.getState()).piecesPosition.value
+    const castle = (store.getState()).piecesPosition.castle
 
     const WhitePositions = Object.fromEntries(
         Object.entries(s).filter(([key]) => key.startsWith("White"))
@@ -124,11 +125,18 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
                 break;
 
             case 'K':
+                if (Selected_piece[0] == 'W') {
+                    if (castle.White.right) InsertMoves(letters[l + 2], Number(posY))
+                    if (castle.White.left) InsertMoves(letters[l - 2], Number(posY))
+                }
+                if (Selected_piece[0] == 'B') {
+                    if (castle.Black.right) InsertMoves(letters[l + 2], Number(posY))
+                    if (castle.Black.left) InsertMoves(letters[l - 2], Number(posY))
+                }
                 for (let x = -1; x <= 1; x++) {
                     for (let y = -1; y <= 1; y++) {
                         if (x === 0 && y === 0) continue;
-                        InsertMoves(letters[l + x], Number(posY) + y
-                        );
+                        InsertMoves(letters[l + x], Number(posY) + y);
                     }
                 }
                 break;

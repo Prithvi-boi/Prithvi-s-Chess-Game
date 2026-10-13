@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { changePosition } from "../slices/piecesPosition.js";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { changePosition, handleCastle } from "../slices/piecesPosition.js";
 import { createContext, useContext } from "react";
 const BoardContext = createContext();
 const useBoard = () => useContext(BoardContext);
@@ -43,6 +43,7 @@ function Board({ playAs = 'white' }) {
         setLastMove({ piece: LastCliked[1], from: LastCliked[0], to: ClikedPosition })
         setTurn(prev => prev == 'W' ? 'B' : 'W')
         dispatch(changePosition([ClikedPosition, LastCliked]))
+        dispatch(handleCastle([ClikedPosition[0], LastCliked]))
         setNextMoves([])
         setkillables([])
       }
