@@ -14,18 +14,29 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
     const BlackPositions = Object.fromEntries(
         Object.entries(s).filter(([key]) => key.startsWith("Black"))
     );
-    
+
     const InsertMoves = (letter, number, canCapture = true) => {
         if (number > 8 || number < 1 || letter == undefined) return false   // off board
         let value = `${letter}${number}`
-
-        for (const key in WhitePositions) {
-            if (WhitePositions[key].includes(value.toLowerCase())) return false   // own piece: blocked
-        }
-        for (const key in BlackPositions) {
-            if (BlackPositions[key].includes(value.toLowerCase())) {
-                if (canCapture) killables.push(value)
-                return false   // enemy piece: can capture it, but blocked after it
+        if (Selected_piece[0] == 'W') {
+            for (const key in WhitePositions) {
+                if (WhitePositions[key].includes(value.toLowerCase())) return false   // own piece: blocked
+            }
+            for (const key in BlackPositions) {
+                if (BlackPositions[key].includes(value.toLowerCase())) {
+                    if (canCapture) killables.push(value)
+                    return false   // enemy piece: can capture it, but blocked after it
+                }
+            }
+        } else {
+            for (const key in BlackPositions) {
+                if (BlackPositions[key].includes(value.toLowerCase())) return false   // own piece: blocked
+            }
+            for (const key in WhitePositions) {
+                if (WhitePositions[key].includes(value.toLowerCase())) {
+                    if (canCapture) killables.push(value)
+                    return false   // enemy piece: can capture it, but blocked after it
+                }
             }
         }
         Moves.push(value)
@@ -49,13 +60,31 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback) {
         let posY = position[1]
         let l = letters.indexOf(posX)
 
+        const checkPawnCapture = (letter, number, color) => {
+            if (letter == undefined || number < 1 || number > 8) return   // off board
+            let value = `${letter}${number}`
+            const enemy = color == 'W' ? BlackPositions : WhitePositions
+
+            for (const key in enemy) {
+                if (enemy[key].includes(value.toLowerCase())) {
+                    killables.push(value)   // enemy is there, so it can be captured
+                    return
+                }
+            }
+        }
+
         if (piece == 'P') {
-            const dir = color == 'W' ? 1 : -1
+            const dir = color == 'W' ? 1 : -1 // direction
             const startRank = color == 'W' ? '2' : '7'
             if (InsertMoves(posX, Number(posY) + dir, false)) {
                 if (posY == startRank) InsertMoves(posX, Number(posY) + 2 * dir, false)
             }
+            
+            checkPawnCapture(letters[l - 1], Number(posY) + dir, color)
+            checkPawnCapture(letters[l + 1], Number(posY) + dir, color)
         }
+
+        
 
         // Other pieces Moves
         switch (piece) {

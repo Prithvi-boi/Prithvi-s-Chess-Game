@@ -23,14 +23,14 @@ export default function DefaultPieces({ elmt }) {
             {piecesPosition.WhitePawn.includes(elmt) && <White_Pawn id={'WP'} className={pieceSize} />}
             {piecesPosition.WhiteKing.includes(elmt) && <White_King id={'WK'} className={pieceSize} />}
             {piecesPosition.WhiteQueen.includes(elmt) && <White_Queen id={'WQ'} className={pieceSize} />}
-            {piecesPosition.WhiteKnight.includes(elmt) && <White_Knight id={'WN'} className={pieceSize} />}
+            {piecesPosition.WhiteNight.includes(elmt) && <White_Knight id={'WN'} className={pieceSize} />}
             {piecesPosition.WhiteBishop.includes(elmt) && <White_Bishop id={'WB'} className={pieceSize} />}
             {piecesPosition.WhiteRook.includes(elmt) && <White_Rook id={'WR'} className={pieceSize} />}
 
             {piecesPosition.BlackPawn.includes(elmt) && <Black_Pawn id={'BP'} className={pieceSize} />}
             {piecesPosition.BlackKing.includes(elmt) && <Black_King id={'BK'} className={pieceSize} />}
             {piecesPosition.BlackQueen.includes(elmt) && <Black_Queen id={'BQ'}  className={pieceSize} />}
-            {piecesPosition.BlackKnight.includes(elmt) && <Black_Knight id={'BN'}  className={pieceSize} />}
+            {piecesPosition.BlackNight.includes(elmt) && <Black_Knight id={'BN'}  className={pieceSize} />}
             {piecesPosition.BlackBishop.includes(elmt) && <Black_Bishop id={'BB'}  className={pieceSize} />}
             {piecesPosition.BlackRook.includes(elmt) && <Black_Rook id={'BR'}  className={pieceSize} />}
         </>

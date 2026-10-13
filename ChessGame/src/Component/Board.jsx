@@ -38,7 +38,7 @@ function Board({ playAs = 'white' }) {
       MoveGen(ClikedPosition, ClikedPiece, MoveGenCallback)
       setLastCliked([ClikedPosition, ClikedPiece])
     } else {
-      if (nextMoves.includes(ClikedPosition)) {        
+      if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {        
         setTurn(prev => prev == 'W' ? 'B' : 'W')
         dispatch(changePosition([ClikedPosition, LastCliked]))
         setNextMoves([])
