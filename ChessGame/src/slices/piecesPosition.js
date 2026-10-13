@@ -21,7 +21,15 @@ const piecesPositionReducer = createSlice({
     },
     reducers: {
         changePosition: (state, action) => {
-            const target = action.payload;      
+            const target = action.payload;     
+            for (const key in state.value) {
+                const element = state.value[key];
+                if (element.includes(target[0].toLowerCase())) {
+                    const j = element.indexOf(target[0].toLowerCase());
+                    element[j] = ''
+                }
+            }
+             
 
             for (const key in state.value) {
                 const k = `${key[0]}${key[5]}`;
