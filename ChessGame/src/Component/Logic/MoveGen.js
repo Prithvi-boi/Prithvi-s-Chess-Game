@@ -1,4 +1,5 @@
 import { store } from '../../store'
+import getAttackedSquares from './Attacks.js'
 
 export default function MoveGen(position, Selected_piece, MoveGenCallback, lastMove) {
     let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -65,7 +66,7 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
             if (letter == undefined || number < 1 || number > 8) return   // off board
             let value = `${letter}${number}`
             const enemy = color == 'W' ? BlackPositions : WhitePositions
-            for (const key in enemy) {                                
+            for (const key in enemy) {
                 if (enemy[key].includes(value.toLowerCase())) {
                     killables.push(value)   // enemy is there, so it can be captured
                     return
@@ -124,22 +125,40 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
                 slide(1, 1); slide(1, -1); slide(-1, 1); slide(-1, -1)
                 break;
 
-            case 'K':
-                if (Selected_piece[0] == 'W') {
-                    if (castle.White.right) InsertMoves(letters[l + 2], Number(posY))
-                    if (castle.White.left) InsertMoves(letters[l - 2], Number(posY))
-                }
-                if (Selected_piece[0] == 'B') {
-                    if (castle.Black.right) InsertMoves(letters[l + 2], Number(posY))
-                    if (castle.Black.left) InsertMoves(letters[l - 2], Number(posY))
-                }
-                for (let x = -1; x <= 1; x++) {
-                    for (let y = -1; y <= 1; y++) {
-                        if (x === 0 && y === 0) continue;
-                        InsertMoves(letters[l + x], Number(posY) + y);
+            case 'K': {
+                const enemyColor = color == 'W' ? 'B' : 'W'
+                const enemyAttacks = getAttackedSquares(s, enemyColor, position.toLowerCase())
+                const side = color == 'W' ? castle.White : castle.Black
+                const rank = Number(posY)
+                const occupied = (sq) => Object.values(s).some(arr => arr.includes(sq.toLowerCase()))
+                const attacked = (sq) => enemyAttacks.has(sq.toLowerCase())
+                const inCheck = attacked(position)
+
+                // castling: king not in check, squares between empty, king's path not attacked
+                if (!inCheck) {
+                    if (side.right && !occupied(`F${rank}`) && !occupied(`G${rank}`)
+                        && !attacked(`F${rank}`) && !attacked(`G${rank}`)) {
+                        InsertMoves(letters[l + 2], rank, false)
+                    }
+                    if (side.left && !occupied(`B${rank}`) && !occupied(`C${rank}`) && !occupied(`D${rank}`)
+                        && !attacked(`D${rank}`) && !attacked(`C${rank}`)) {
+                        InsertMoves(letters[l - 2], rank, false)
                     }
                 }
+
+                // normal king steps
+                for (let x = -1; x <= 1; x++) {
+                    for (let y = -1; y <= 1; y++) {
+                        if (x === 0 && y === 0) continue
+                        InsertMoves(letters[l + x], Number(posY) + y)
+                    }
+                }
+
+                // king can't step onto an attacked square
+                Moves = Moves.filter(sq => !attacked(sq))
+                killables = killables.filter(sq => !attacked(sq))
                 break;
+            }
 
             case 'N':
                 let j = 2

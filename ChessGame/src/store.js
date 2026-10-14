@@ -5,6 +5,6 @@ import piecesPositionReducer from './slices/piecesPosition'
 export const store = configureStore({
     reducer: {
         gameMode: gameModeReducer,
-        piecesPosition: piecesPositionReducer
+        piecesPosition: piecesPositionReducer,
     }
 })

@@ -4,19 +4,19 @@ const piecesPositionReducer = createSlice({
     name: 'piecesPosition',
     initialState: {
         value: {
-            WhiteKing: ['e1'],
+            WhiteKing: ['e4'],
             WhiteQueen: ['d1'],
             WhiteBishop: ['c1', 'f1'],
             WhiteNight: ['b1', 'g1'],
             WhiteRook: ['a1', 'h1'],
-            WhitePawn: ['a7', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
+            WhitePawn: ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
 
             BlackKing: ['e8'],
-            BlackQueen: ['d8'],
+            BlackQueen: ['c5'],
             BlackBishop: ['c8', 'f8'],
             BlackNight: ['b8', 'g8'],
-            BlackRook: ['b6', 'h8'],
-            BlackPawn: ['b5', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
+            BlackRook: ['a8', 'h8'],
+            BlackPawn: ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
         },
         castle: {
             White: {

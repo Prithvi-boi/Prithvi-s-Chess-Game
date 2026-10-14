@@ -48,7 +48,7 @@ function Board({ playAs = 'white' }) {
         dispatch(handleCastle([ClikedPosition[0], LastCliked]))
         let lastrank = LastCliked[1][0] == 'W' ? '8' : '1'
         if (LastCliked[1][1] == 'P' && ClikedPosition[1] == lastrank) {
-          setPromotion([<PawnPromotion color={LastCliked[1][0]} file={ClikedPosition} PromotionCallback={() => setPromotion([])}/>, ClikedPosition])
+          setPromotion([<PawnPromotion color={LastCliked[1][0]} file={ClikedPosition} PromotionCallback={() => setPromotion([])} />, ClikedPosition])
         }
         setNextMoves([])
         setkillables([])
@@ -109,24 +109,24 @@ import { handlePawnPromotion } from "../slices/piecesPosition.js";
 
 export function PawnPromotion({ color, file, PromotionCallback }) {
   let pieceStyle = 'h-[10vw] w-full border border-black'
-  let positionStyle = ['A','B','C','D'].includes(file[0])
+  let positionStyle = ['A', 'B', 'C', 'D'].includes(file[0])
   const dispatch = useDispatch()
-  
+
   return (
     <div className={`grid grid-cols-4 absolute h-[10vw] w-[30vw] bg-white border border-black -top-10 ${positionStyle ? 'left-0' : 'right-0'} z-50`}>
       {color == 'W' ?
         <>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['WQ',file])), PromotionCallback()}}><White_Queen className={pieceStyle} /> </div>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['WR',file])), PromotionCallback()}}><White_Rook className={pieceStyle} /></div>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['WN',file])), PromotionCallback()}}><White_Knight className={pieceStyle} /></div>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['WB',file])), PromotionCallback()}}><White_Bishop className={pieceStyle} /> </div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['WQ', file])), PromotionCallback() }}><White_Queen className={pieceStyle} /> </div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['WR', file])), PromotionCallback() }}><White_Rook className={pieceStyle} /></div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['WN', file])), PromotionCallback() }}><White_Knight className={pieceStyle} /></div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['WB', file])), PromotionCallback() }}><White_Bishop className={pieceStyle} /> </div>
         </>
         :
         <>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['BQ',file])), PromotionCallback()}}><Black_Queen className={pieceStyle} /> </div>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['BR',file])), PromotionCallback()}}><Black_Rook className={pieceStyle} /></div>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['BN',file])), PromotionCallback()}}><Black_Knight className={pieceStyle} /></div>
-          <div onClick={() =>{dispatch(handlePawnPromotion(['BB',file])), PromotionCallback()}}><Black_Bishop className={pieceStyle} /> </div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['BQ', file])), PromotionCallback() }}><Black_Queen className={pieceStyle} /> </div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['BR', file])), PromotionCallback() }}><Black_Rook className={pieceStyle} /></div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['BN', file])), PromotionCallback() }}><Black_Knight className={pieceStyle} /></div>
+          <div onClick={() => { dispatch(handlePawnPromotion(['BB', file])), PromotionCallback() }}><Black_Bishop className={pieceStyle} /> </div>
         </>}
     </div>
   )
