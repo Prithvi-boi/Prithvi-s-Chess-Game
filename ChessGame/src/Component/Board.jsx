@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { changePosition, handleCastle } from "../slices/piecesPosition.js";
 import { createContext, useContext } from "react";
 const BoardContext = createContext();
 const useBoard = () => useContext(BoardContext);
+import getAttackedSquares from "./Logic/Attacks.js";
 
 import DefaultPieces from "./Pieces/DefaultPieces.jsx"
 import MoveGen from "./Logic/MoveGen.js";
@@ -31,6 +32,10 @@ function Board({ playAs = 'white' }) {
   const [lastMove, setLastMove] = useState(null)
   const [Turn, setTurn] = useState('W')
   const [promotion, setPromotion] = useState([])
+  const pieces = useSelector(state => state.piecesPosition.value)
+  const enemy = Turn == 'W' ? 'B' : 'W'
+  const kingSq = pieces[Turn == 'W' ? 'WhiteKing' : 'BlackKing'][0]
+  const checkedSquare = getAttackedSquares(pieces, enemy).has(kingSq) ? kingSq : null
   const handlePieceClick = (e) => {
     if (promotion[0] != null) return
     setClikedPiece(e.currentTarget.children.item(0) != null ? e.currentTarget.children.item(0).id : null)
@@ -81,6 +86,7 @@ function Board({ playAs = 'white' }) {
             else { color = i % 2 == 0 ? 'bg-[#BB9979]' : 'bg-[#E9E9DF]' }
             return (
               <div key={elmt} id={elmt}
+                style={elmt.toLowerCase() == checkedSquare ? { backgroundColor: '#ef4444' } : undefined}
                 className={`relative h-full w-full ${color} ${nextMoves.includes(elmt) ? 'moveOverlay' : ''} ${killables.includes(elmt) ? 'killOverlay' : ''} text-amber-950 flex justify-center items-center`}
                 onClick={(e) => { handlePieceClick(e) }}>
                 <DefaultPieces elmt={elmt} />

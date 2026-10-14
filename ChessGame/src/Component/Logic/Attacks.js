@@ -6,7 +6,7 @@ export default function getAttackedSquares(s, color, ignoreSquare = null) {
     const occupied = new Set()
     Object.values(s).forEach(arr => arr.forEach(sq => { if (sq) occupied.add(sq) }))
     if (ignoreSquare) occupied.delete(ignoreSquare)
-        
+
     // marks the square as attacked, returns true only if it was empty (keep sliding)
     const add = (f, r) => {
         if (f < 0 || f > 7 || r < 1 || r > 8) return false

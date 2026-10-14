@@ -132,7 +132,7 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
                 const rank = Number(posY)
                 const occupied = (sq) => Object.values(s).some(arr => arr.includes(sq.toLowerCase()))
                 const attacked = (sq) => enemyAttacks.has(sq.toLowerCase())
-                const inCheck = attacked(position)
+                const inCheck = attacked(position)            
 
                 // castling: king not in check, squares between empty, king's path not attacked
                 if (!inCheck) {
@@ -173,6 +173,45 @@ export default function MoveGen(position, Selected_piece, MoveGenCallback, lastM
 
             default:
                 break;
+        }
+
+        // every non-king piece: drop moves that leave our own king in check
+        if (piece != 'K') {
+            const enemyColor = color == 'W' ? 'B' : 'W'
+            const kingSq = s[color == 'W' ? 'WhiteKing' : 'BlackKing'][0]
+
+            const leavesKingSafe = (to) => {
+                const from = position.toLowerCase()
+                const dest = to.toLowerCase()
+
+                // 1. copy the board
+                const sim = {}
+                for (const key in s) sim[key] = [...s[key]]
+
+                // 2. en passant: pawn goes diagonal onto an empty square -> victim is beside us
+                if (piece == 'P' && from[0] != dest[0] && !Object.values(s).some(arr => arr.includes(dest))) {
+                    const victim = `${dest[0]}${from[1]}`
+                    const vKey = color == 'W' ? 'BlackPawn' : 'WhitePawn'
+                    sim[vKey] = sim[vKey].map(sq => sq == victim ? '' : sq)
+                }
+
+                // 3. remove whatever is captured on the destination
+                for (const key in sim) sim[key] = sim[key].map(sq => sq == dest ? '' : sq)
+
+                // 4. move our piece
+                for (const key in sim) {
+                    if (key[0] == color && key[5] == piece) {
+                        const j = sim[key].indexOf(from)
+                        if (j !== -1) { sim[key][j] = dest; break }
+                    }
+                }
+
+                // 5. is our king attacked in that fake position?
+                return !getAttackedSquares(sim, enemyColor).has(kingSq)
+            }
+
+            Moves = Moves.filter(leavesKingSafe)
+            killables = killables.filter(leavesKingSafe)
         }
     }
 
