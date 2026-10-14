@@ -1,10 +1,10 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const piecesPositionReducer = createSlice({
     name: 'piecesPosition',
     initialState: {
         value: {
-            WhiteKing: ['e4'],
+            WhiteKing: ['e1'],
             WhiteQueen: ['d1'],
             WhiteBishop: ['c1', 'f1'],
             WhiteNight: ['b1', 'g1'],
@@ -12,7 +12,7 @@ const piecesPositionReducer = createSlice({
             WhitePawn: ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'h2', 'g2'],
 
             BlackKing: ['e8'],
-            BlackQueen: ['c5'],
+            BlackQueen: ['d8'],
             BlackBishop: ['c8', 'f8'],
             BlackNight: ['b8', 'g8'],
             BlackRook: ['a8', 'h8'],
@@ -27,11 +27,23 @@ const piecesPositionReducer = createSlice({
                 right: true,
                 left: true
             },
-        }
+        },
+        gameOver: null,
+        moves: 0,            // total moves played, moves % 2 = who is to move
+        halfMove: 0,         // moves since the last pawn move or capture (for the 50-move rule)
+        history: {},         // position key -> how many times it has happened
     },
     reducers: {
         changePosition: (state, action) => {
             const target = action.payload;
+            if (state.moves === 0) state.history[positionKey(state)] = 1   // count the starting position too
+
+            const isCapture = Object.values(state.value).some(arr => arr.includes(target[0].toLowerCase()))
+            const isPawnMove = target[1][1][1] == 'P'
+            state.moves += 1
+            if (isCapture || isPawnMove) { state.halfMove = 0; state.history = {} }   // can never repeat after these
+            else state.halfMove += 1
+
             // Castle Logic
             if (target[1][1][1] == 'R') {
                 let key = target[1][1][0] == 'W' ? 'WhiteRook' : 'BlackRook'
@@ -86,6 +98,11 @@ const piecesPositionReducer = createSlice({
                     break
                 }
             }
+
+            if (!state.value.WhiteRook.includes('a1')) state.castle.White.left = false
+            if (!state.value.WhiteRook.includes('h1')) state.castle.White.right = false
+            if (!state.value.BlackRook.includes('a8')) state.castle.Black.left = false
+            if (!state.value.BlackRook.includes('h8')) state.castle.Black.right = false
         },
 
         handleCastle: (state, action) => {
@@ -113,22 +130,62 @@ const piecesPositionReducer = createSlice({
             c.right = false
         },
 
-        handlePawnPromotion: (state, action) => {            
+        handlePawnPromotion: (state, action) => {
             let color = action.payload[0][0]
             let piece = action.payload[0][1]
-            for (const key in state.value) {                
+            for (const key in state.value) {
                 const element = state.value[key];
-                if (key[0] == color && key[5] == piece){
-                   element.push(action.payload[1].toLowerCase()) 
+                if (key[0] == color && key[5] == piece) {
+                    element.push(action.payload[1].toLowerCase())
                 }
                 if (key[0] == color && key[5] == 'P') {
                     let i = element.indexOf(action.payload[1].toLowerCase())
                     element[i] = ''
                 }
             }
-        }
+            state.history = {}
+            recordAndCheck(state)
+        },
+
+        evaluateDraw: (state) => { recordAndCheck(state) },
+        setGameOver: (state, action) => { state.gameOver = action.payload },
     }
 })
 
+const isInsufficient = (value) => {
+    const minors = []
+    for (const key in value) {
+        const type = key[5]                                   // K Q B N R P
+        if (type == 'K') continue
+        for (const sq of value[key]) {
+            if (!sq) continue                                 // skip captured ('') slots
+            if (type != 'B' && type != 'N') return false      // pawn, rook or queen can still mate
+            minors.push({ type, color: ('abcdefgh'.indexOf(sq[0]) + Number(sq[1])) % 2 })
+        }
+    }
+    if (minors.length <= 1) return true                       // K v K, K+B v K, K+N v K
+    return minors.every(m => m.type == 'B' && m.color == minors[0].color)   // bishops, all on the same square color
+}
+
+// same position = same pieces on same squares + same castle rights + same side to move
+const positionKey = (state) => {
+    const pcs = []
+    for (const key in state.value)
+        for (const sq of state.value[key])
+            if (sq) pcs.push(`${key[0]}${key[5]}${sq}`)
+    const { White: w, Black: b } = state.castle
+    return pcs.sort().join(',') + `|${w.left}${w.right}${b.left}${b.right}|${state.moves % 2}`
+}
+
+const recordAndCheck = (state) => {
+    if (state.gameOver) return
+    const k = positionKey(state)
+    state.history[k] = (state.history[k] || 0) + 1
+
+    if (isInsufficient(state.value)) state.gameOver = 'Draw: insufficient material'
+    else if (state.history[k] >= 3) state.gameOver = 'Draw: threefold repetition'
+    else if (state.halfMove >= 100) state.gameOver = 'Draw: 50-move rule'
+}
+
 export default piecesPositionReducer.reducer
-export const { changePosition, handleCastle, handlePawnPromotion } = piecesPositionReducer.actions
+export const { changePosition, handleCastle, handlePawnPromotion, evaluateDraw, setGameOver } = piecesPositionReducer.actions

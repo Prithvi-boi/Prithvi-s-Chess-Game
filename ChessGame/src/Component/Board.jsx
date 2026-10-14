@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changePosition, handleCastle } from "../slices/piecesPosition.js";
+import { changePosition, handleCastle, evaluateDraw, setGameOver } from "../slices/piecesPosition.js";
 import { createContext, useContext } from "react";
 const BoardContext = createContext();
 const useBoard = () => useContext(BoardContext);
 import getAttackedSquares from "./Logic/Attacks.js";
-
+import hasLegalMove from "./Logic/GameState.js";
 import DefaultPieces from "./Pieces/DefaultPieces.jsx"
 import MoveGen from "./Logic/MoveGen.js";
 
 function Board({ playAs = 'white' }) {
+  const gameOver = useSelector(state => state.piecesPosition.gameOver)
   const dispatch = useDispatch()
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -30,14 +31,14 @@ function Board({ playAs = 'white' }) {
   const [ClikedPosition, setClikedPosition] = useState()
   const [LastCliked, setLastCliked] = useState([])
   const [lastMove, setLastMove] = useState(null)
-  const [Turn, setTurn] = useState('W')
+  const Turn = useSelector(state => state.piecesPosition.moves % 2 == 0 ? 'W' : 'B')
   const [promotion, setPromotion] = useState([])
   const pieces = useSelector(state => state.piecesPosition.value)
   const enemy = Turn == 'W' ? 'B' : 'W'
   const kingSq = pieces[Turn == 'W' ? 'WhiteKing' : 'BlackKing'][0]
   const checkedSquare = getAttackedSquares(pieces, enemy).has(kingSq) ? kingSq : null
   const handlePieceClick = (e) => {
-    if (promotion[0] != null) return
+    if (gameOver || promotion[0] != null) return
     setClikedPiece(e.currentTarget.children.item(0) != null ? e.currentTarget.children.item(0).id : null)
     setClikedPosition(e.currentTarget.id)
   }
@@ -48,9 +49,9 @@ function Board({ playAs = 'white' }) {
     } else {
       if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
         setLastMove({ piece: LastCliked[1], from: LastCliked[0], to: ClikedPosition })
-        setTurn(prev => prev == 'W' ? 'B' : 'W')
         dispatch(changePosition([ClikedPosition, LastCliked]))
         dispatch(handleCastle([ClikedPosition[0], LastCliked]))
+        dispatch(evaluateDraw())
         let lastrank = LastCliked[1][0] == 'W' ? '8' : '1'
         if (LastCliked[1][1] == 'P' && ClikedPosition[1] == lastrank) {
           setPromotion([<PawnPromotion color={LastCliked[1][0]} file={ClikedPosition} PromotionCallback={() => setPromotion([])} />, ClikedPosition])
@@ -68,6 +69,22 @@ function Board({ playAs = 'white' }) {
     setNextMoves(moves)
     setkillables(killables)
   }
+
+  useEffect(() => {
+    if (gameOver) setTimeout(() => alert(gameOver), 100)
+  }, [gameOver])
+
+  useEffect(() => {
+    if (!lastMove || gameOver) return
+    if (promotion[0] != null) return
+    if (hasLegalMove(Turn, lastMove)) return
+
+    dispatch(setGameOver(
+      checkedSquare
+        ? `Checkmate! ${Turn == 'W' ? 'Black' : 'White'} wins`
+        : 'Stalemate! Draw'
+    ))
+  }, [pieces, Turn, promotion])
   return (
     <div className={`w-full h-[100vw] bg-[#3A1A0C] border-y-4  border-[#634833] grid grid-cols-[1.5rem_auto_1.5em] grid-rows-[1.5rem_auto_1.5em]`}>
       <BoardContext.Provider value={{ reverse: playAs === "white" }}>
