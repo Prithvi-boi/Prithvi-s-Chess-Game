@@ -15,10 +15,10 @@ import Black_Knight from '../../Assets/Default Chess Pieces/Black_Rook-1.svg?rea
 import Black_Rook from '../../Assets/Default Chess Pieces/Black_Rook.svg?react'
 
 export default function DefaultPieces({ elmt, PromotionFlag = false, PromotionPiece = {color: null , file: null, PromotionCallback: ()=>{}} }) {
-    const pieceSize = 'h-[10vw] w-full'
+    const pieceSize = 'h-[10vw] w-full lg:h-full md:h-full'
     const piecesPosition = useSelector(state => state.piecesPosition.value)
     const {color , file, PromotionCallback} = PromotionPiece
-    return (
+    return ( 
         <>
             {PromotionFlag == false ?
                 <>

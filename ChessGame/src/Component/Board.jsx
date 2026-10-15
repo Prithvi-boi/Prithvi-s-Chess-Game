@@ -22,7 +22,6 @@ import MoveGen from "./Logic/MoveGen.js";
 // Default Pieces Styles Import
 import DefaultPieces from "./Pieces/DefaultPieces.jsx"
 
-
 /*-------------------------------
     Main Game Function (Board)
 ---------------------------------*/
@@ -141,7 +140,7 @@ function Board({ playAs = 'white' }) {
 
   //////////////////////////////////////////////////
   return (
-    <div className={`w-full h-[100vw] bg-[#3A1A0C] border-y-4  border-[#634833] grid grid-cols-[1.5rem_auto_1.5em] grid-rows-[1.5rem_auto_1.5em]`}>
+    <div aria-label="Board" className={`BoardStyle bg-[#3A1A0C] border-y-4  border-[#634833]`}>
       <BoardContext.Provider value={{ reverse: playAs === "white" }}>
         <Coords row={1} col={2} deg={180} />
         <Coords row={3} col={2} deg={0} />
@@ -176,7 +175,6 @@ function Board({ playAs = 'white' }) {
 /*-------------------------------
     Board Helper Function
 ---------------------------------*/
-
 
 function Coords({ row, col, deg, grid_col, num }) {
   const { reverse } = useBoard()

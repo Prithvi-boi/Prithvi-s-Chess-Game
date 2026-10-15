@@ -1,14 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&display=swap');
 @import "tailwindcss";
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  background-color: #302E2B;
+@theme {
+  --font-instrument: "Instrument Serif", serif;
 }
 
 @theme {
-  --font-instrument: "Instrument Serif", serif;
+  --breakpoint-xs: 425px;
 }
 
 @theme {
@@ -19,7 +17,7 @@ body {
 }
 
 .boxBody {
-  @apply bg-[#252525] p-2 text-white
+  @apply bg-bg-dark p-2 text-white
 }
 
 .basicBtn {
@@ -32,4 +30,24 @@ body {
 
 .killOverlay {
   @apply relative before:absolute before:inset-0 before:bg-red-500/30 before:pointer-events-none
+}
+
+.BoardStyle {
+  @apply 
+  grid grid-cols-[1.5rem_auto_1.5em] grid-rows-[1.5rem_auto_1.5em]
+  sm:grid-cols-[1.5rem_auto_1.5rem]
+  sm:grid-rows-[1.5rem_24rem_1.5rem]
+  lg:grid-rows-[1.5rem_28rem_1.5rem]
+
+  w-full h-[100vw] 
+  sm:h-110
+  sm:w-105
+  lg:h-126
+  lg:w-120
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #302E2B;
 }

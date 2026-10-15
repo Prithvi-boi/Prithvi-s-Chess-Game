@@ -19,27 +19,32 @@ export default function GamePage() {
         </nav>
       </div>
 
-      {/* Game Section */}
-      <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr]">
-          <GameSection_PlayerCard />
-          <Board />
-          <GameSection_PlayerCard reverse={true} />
-      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-[auto_auto] sm:gap-2 place-items-center">
+        <div className="w-full bg-[#1d1d1d]">
+          {/* Game Section */}
+          <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
+            <GameSection_PlayerCard />
+            <Board />
+            <GameSection_PlayerCard reverse={true} />
+          </div>
 
-      {/* Buttons */}
-      <div className="grid grid-cols-2 gap-4 px-10">
-        <button className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><ResignIcon/> Resign</button>
-        <button className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><DrawIcon/> Draw</button>
+        </div>
+        <div className="h-full w-full flex flex-col gap-4">
+          {/* Buttons */}
+          <div className="grid grid-cols-2 gap-4 px-10 sm:order-2 w-full">
+            <button className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><ResignIcon /> Resign</button>
+            <button className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><DrawIcon /> Draw</button>
+          </div>
+          {/* Moves Tracker */}
+          <MovesTracker></MovesTracker>
+        </div>
       </div>
-
-      {/* Moves Tracker */}
-      <MovesTracker></MovesTracker>
     </div>
   )
 }
 
 
-export function GameSection_PlayerCard({reverse}) {
+export function GameSection_PlayerCard({ reverse }) {
   const reverseCardCss = 'rounded-b-md place-self-start row-start-1'
   return (
     <>
@@ -60,7 +65,7 @@ export function GameSection_PlayerCard({reverse}) {
         </div>
 
         {/* Rating and Time*/}
-        <div className={`grid ${reverse ? "grid-rows-[auto_1fr]":  "grid-rows-[1fr_auto]"} px-1 grid-cols-1 h-full w-full`}>
+        <div className={`grid ${reverse ? "grid-rows-[auto_1fr]" : "grid-rows-[1fr_auto]"} px-1 grid-cols-1 h-full w-full`}>
           <div className={`h-10 w-[80%] bg-[#3B3B3B] rounded-md place-self-center justify-self-center`}></div>
           <div className={`h-10 w-full bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md place-self-end'} justify-self-center`}></div>
         </div>
@@ -70,21 +75,21 @@ export function GameSection_PlayerCard({reverse}) {
 }
 
 export function MovesTracker() {
-  let Move = ['e4', 'xd','a8']
+  let Move = ['e4', 'xd', 'a8']
   return (
-    <div className="bg-bg-dark text-soft-white">
+    <div className="bg-bg-dark text-soft-white w-full h-full">
       <div className="flex justify-between px-5 py-4">
         <h4>Moves</h4>
         <div className="flex gap-2">
-          <button className="basicBtn"><span className="rotate-90"><ArrowIcon/></span></button>
-          <button className="basicBtn"><span className="rotate-270"><ArrowIcon/></span></button>
+          <button className="basicBtn"><span className="rotate-90"><ArrowIcon /></span></button>
+          <button className="basicBtn"><span className="rotate-270"><ArrowIcon /></span></button>
         </div>
       </div>
 
       <div className="h-100 overflow-y-scroll">
-        {Move.map((val,i)=>{
-          return(
-            <div key={i} className={`${i % 2 == 0 ? 'bg-background': 'bg-bg-dark'} flex gap-4 h-10 items-center px-5`}>
+        {Move.map((val, i) => {
+          return (
+            <div key={i} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex gap-4 h-10 items-center px-5`}>
               <p>{i}</p>
               <p>{val}</p>
             </div>
