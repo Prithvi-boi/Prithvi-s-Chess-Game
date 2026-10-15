@@ -1,5 +1,9 @@
+/*-------------------------------
+          IMPORTS
+---------------------------------*/
+
 // React Hooks Imports
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // React Context Imports and Application
 import { useContext, createContext } from 'react'
@@ -18,75 +22,115 @@ import MoveGen from "./Logic/MoveGen.js";
 // Default Pieces Styles Import
 import DefaultPieces from "./Pieces/DefaultPieces.jsx"
 
+
+/*-------------------------------
+    Main Game Function (Board)
+---------------------------------*/
+
 function Board({ playAs = 'white' }) {
-  const gameOver = useSelector(state => state.piecesPosition.gameOver)
+
   const dispatch = useDispatch()
+
+  //____________ 1. Displaying Board ____________ //
+  //////////////////////////////////////////////////
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
   let darkSquares = []
+
+  /*Creating files and Rank (A1,B2,E4,D3....)*/
   for (let i = 0; i < numbers.length; i++) {
     for (let j = 0; j < letters.length; j++) {
       const element = `${letters[j]}${numbers[i]}`;
       darkSquares.push(element)
     }
   }
+  if (playAs == 'white') { darkSquares = darkSquares.reverse() }
 
-  if (playAs == 'white') {
-    darkSquares = darkSquares.reverse()
-  }
 
-  // --------------------- Game Logic
+  //____________ Game Logic and Current Values ____________ //
+  ////////////////////////////////////////////////////////////
+  // redux state imports
+  const gameOver = useSelector(state => state.piecesPosition.gameOver)
+  const pieces = useSelector(state => state.piecesPosition.value)
+  const Turn = useSelector(state => state.piecesPosition.moves % 2 == 0 ? 'W' : 'B')
+
+  // Conditional variables
+  const enemy = Turn == 'W' ? 'B' : 'W'                                               // Checks the current opponent
+  const kingSq = pieces[Turn == 'W' ? 'WhiteKing' : 'BlackKing'][0]                   // Get all the posible King moving Squares
+  const checkedSquare = getAttackedSquares(pieces, enemy).has(kingSq) ? kingSq : null // Check All the Current Attacked Squares for King 
+
+  // Board States
   const [ClikedPiece, setClikedPiece] = useState()
   const [ClikedPosition, setClikedPosition] = useState()
   const [LastCliked, setLastCliked] = useState([])
-  const [lastMove, setLastMove] = useState(null)
-  const Turn = useSelector(state => state.piecesPosition.moves % 2 == 0 ? 'W' : 'B')
   const [promotion, setPromotion] = useState([])
-  const pieces = useSelector(state => state.piecesPosition.value)
-  const enemy = Turn == 'W' ? 'B' : 'W'
-  const kingSq = pieces[Turn == 'W' ? 'WhiteKing' : 'BlackKing'][0]
-  const checkedSquare = getAttackedSquares(pieces, enemy).has(kingSq) ? kingSq : null
+  const [nextMoves, setNextMoves] = useState([])
+  const [killables, setkillables] = useState([])
+
+  // Board Refs
+  const lastMoveRef = useRef(null)
+
+  //____________ Game Events ____________ //
+  //////////////////////////////////////////
+
   const handlePieceClick = (e) => {
     if (gameOver || promotion[0] != null) return
     setClikedPiece(e.currentTarget.children.item(0) != null ? e.currentTarget.children.item(0).id : null)
     setClikedPosition(e.currentTarget.id)
   }
-  useEffect(() => {
-    if (ClikedPiece != null && ClikedPiece[0] == Turn) {
-      MoveGen(ClikedPosition, ClikedPiece, MoveGenCallback, lastMove)
-      setLastCliked([ClikedPosition, ClikedPiece])
-    } else {
-      if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
-        setLastMove({ piece: LastCliked[1], from: LastCliked[0], to: ClikedPosition })
-        dispatch(changePosition([ClikedPosition, LastCliked]))
-        dispatch(handleCastle([ClikedPosition[0], LastCliked]))
-        dispatch(evaluateDraw())
-        let lastrank = LastCliked[1][0] == 'W' ? '8' : '1'
-        if (LastCliked[1][1] == 'P' && ClikedPosition[1] == lastrank) {
-          setPromotion([<DefaultPieces PromotionFlag={true} PromotionPiece={{ color: LastCliked[1][0] , file: ClikedPosition , PromotionCallback: () => setPromotion([]) }} />, ClikedPosition])
-        }
-        setNextMoves([])
-        setkillables([])
-      }
-    }
 
-  }, [ClikedPiece, ClikedPosition])
-
-  const [nextMoves, setNextMoves] = useState([])
-  const [killables, setkillables] = useState([])
   const MoveGenCallback = (moves, killables) => {
     setNextMoves(moves)
     setkillables(killables)
   }
 
   useEffect(() => {
+    // If User Click on a Piece
+    if (ClikedPiece != null && ClikedPiece[0] == Turn) {
+      MoveGen(ClikedPosition, ClikedPiece, MoveGenCallback, lastMoveRef.current)
+      setLastCliked([ClikedPosition, ClikedPiece])
+    }
+    // Else If User Click on Other blocks
+    else {
+      // If User Click only on a Move or Kill blocks
+      if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
+
+        dispatch(changePosition([ClikedPosition, LastCliked]))  // Move the Piece
+        dispatch(handleCastle([ClikedPosition[0], LastCliked])) // Check for castle then Move King & rook
+        dispatch(evaluateDraw())                                // Check for Draw
+
+        lastMoveRef.current = { piece: LastCliked[1], from: LastCliked[0], to: ClikedPosition } // Stores the Last move history
+
+        // Check for Pawn Promotion
+        let lastrank = LastCliked[1][0] == 'W' ? '8' : '1'
+        if (LastCliked[1][1] == 'P' && ClikedPosition[1] == lastrank) {
+          setPromotion([
+              <DefaultPieces 
+                PromotionFlag={true} 
+                PromotionPiece={{ color: LastCliked[1][0], file: ClikedPosition, 
+                PromotionCallback: () => setPromotion([]) }} 
+              />, 
+              ClikedPosition
+            ])
+        }
+
+        // After Moving or Killing the piece. Set Both state to empty
+        setNextMoves([])
+        setkillables([])
+      }
+    }
+  }, [ClikedPiece, ClikedPosition])
+
+  //____________ Game Over and Draw Logic ____________ //
+  //////////////////////////////////////////////////////
+  useEffect(() => {
     if (gameOver) setTimeout(() => alert(gameOver), 100)
   }, [gameOver])
 
   useEffect(() => {
-    if (!lastMove || gameOver) return
+    if (!lastMoveRef.current || gameOver) return
     if (promotion[0] != null) return
-    if (hasLegalMove(Turn, lastMove)) return
+    if (hasLegalMove(Turn, lastMoveRef.current)) return
 
     dispatch(setGameOver(
       checkedSquare
@@ -94,6 +138,8 @@ function Board({ playAs = 'white' }) {
         : 'Stalemate! Draw'
     ))
   }, [pieces, Turn, promotion])
+
+  //////////////////////////////////////////////////
   return (
     <div className={`w-full h-[100vw] bg-[#3A1A0C] border-y-4  border-[#634833] grid grid-cols-[1.5rem_auto_1.5em] grid-rows-[1.5rem_auto_1.5em]`}>
       <BoardContext.Provider value={{ reverse: playAs === "white" }}>
@@ -126,7 +172,10 @@ function Board({ playAs = 'white' }) {
   )
 }
 
-// ----------------------------- Board Helper Functions ------------------------- /
+//------------------------------------------------------------------------- X
+/*-------------------------------
+    Board Helper Function
+---------------------------------*/
 
 
 function Coords({ row, col, deg, grid_col, num }) {
