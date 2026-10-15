@@ -10,12 +10,12 @@ import ArrowIcon from '../../Assets/Icons/Down.svg?react'
 export default function GamePage() {
   const navigate = useNavigate()
   return (
-    <div className={`flex flex-col gap-5 mt-10 xl:gap-14`}>
+    <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
       {/* Heading and Navigation */}
-      <div className="flex justify-between p-5">
-        <Logo style={"mr-auto text-[25px] xl:pl-50"} />
+      <div className="flex justify-between p-5 lg:px-50 lg:py-0">
+        <Logo style={"mr-auto text-[25px] lg:text-[30px]  xl:pl-50"} />
         <nav onClick={() => navigate('/home')}>
-          <ExitIcon />
+          <ExitIcon className={'h-full'}/>
         </nav>
       </div>
 
@@ -45,29 +45,29 @@ export default function GamePage() {
 
 
 export function GameSection_PlayerCard({ reverse }) {
-  const reverseCardCss = 'rounded-b-md place-self-start row-start-1'
+  const reverseCardCss = 'rounded-b-md'
   return (
     <>
       {/* Profile Pic */}
-      <div className="bg-bg-dark h-25 w-full grid grid-cols-[1fr_auto_3fr] px-2 place-items-center gap-2">
-        <div className="bg-soft-white rounded-xl h-13 w-13">
+      <div className="bg-bg-dark h-25 md:h-20 w-full grid grid-cols-[1fr_3fr_2fr] lg:grid-cols-[0.5fr_2fr_1fr] px-2 place-items-center gap-2">
+        <div className="bg-soft-white rounded-xl h-13 w-13 md:h-9 md:w-9 md:rounded-sm">
           <img></img>
         </div>
 
         {/* User Details and Captures*/}
-        <div className="flex flex-col gap-2">
-          <div className="grid grid-cols-[auto_3rem] gap-1.5 place-items-center">
-            <p className="text-white font-extrabold text-[0.7em] xl:text-lg">PrithviOpinChess</p>
-            <div className="h-7 w-full bg-[#3B3B3B] rounded-md"></div>
+        <div className="flex flex-col gap-2 w-full">
+          <div className="grid grid-cols-[auto_3rem] gap-1.5 md:gap-2 md:flex place-items-center">
+            <p className="text-white font-extrabold text-[0.7em]">PrithviOpinChess</p>
+            <div className="h-7 md:h-5 md:w-10 w-full bg-[#3B3B3B] rounded-md"></div>
           </div>
 
-          <div className="h-9 w-full bg-[#3B3B3B] rounded-md"></div>
+          <div className="h-10 md:h-7 md:w-[70%] lg:w-[50%] w-full bg-[#3B3B3B] rounded-md"></div>
         </div>
 
         {/* Rating and Time*/}
-        <div className={`grid ${reverse ? "grid-rows-[auto_1fr]" : "grid-rows-[1fr_auto]"} px-1 grid-cols-1 h-full w-full`}>
-          <div className={`h-10 w-[80%] bg-[#3B3B3B] rounded-md place-self-center justify-self-center`}></div>
-          <div className={`h-10 w-full bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md place-self-end'} justify-self-center`}></div>
+        <div className={` px-1 h-full w-full flex flex-col items-center gap-2 ${!reverse && 'justify-end'}`}>
+          <div className={`h-8 md:h-6 w-[80%] md:w-[40%] bg-[#3B3B3B] rounded-md ${reverse && 'order-2'}`}></div>
+          <div className={`h-10 md:h-8 w-full md:w-[50%] bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md'}`}></div>
         </div>
       </div>
     </>
