@@ -1,14 +1,17 @@
-import Logo from "../Component/Logo";
 import { useState } from "react";
-import correct from "/src/Assets/Icons/correct.png"
+import { useNavigate } from 'react-router-dom'
+
+// Component Imports
+import Logo from "../Component/Logo";
 import Button from "../Component/Button";
 
-// Svg Logos Imports:
-import AppleLogo from '../../public/Downloads/appleLogo.svg?react'
-import GoogleLogo from '../../public/Downloads/googleLogo.svg?react'
-import FacebookLogo from '../../public/Downloads/facebookLogo.svg?react'
+// Login Logos Imports:
+import AppleLogo from '../Assets/Login-icons/appleLogo.svg?react'
+import GoogleLogo from '../Assets/Login-icons/googleLogo.svg?react'
+import FacebookLogo from '../Assets/Login-icons/facebookLogo.svg?react'
 
-import { useNavigate } from 'react-router-dom'
+// Icon Imports:
+import correct from "/src/Assets/Icons/correct.png"
 
 export default function LoginPage() {
     const [rememberMe, setRememberMe] = useState(false)
