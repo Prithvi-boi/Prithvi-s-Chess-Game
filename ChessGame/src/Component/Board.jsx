@@ -93,7 +93,7 @@ function Board({ playAs = 'white' }) {
     else {
       // If User Click only on a Move or Kill blocks
       if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
-
+        // console.log(ClikedPosition, LastCliked[1]); 
         dispatch(changePosition([ClikedPosition, LastCliked]))  // Move the Piece
         dispatch(handleCastle([ClikedPosition[0], LastCliked])) // Check for castle then Move King & rook
         dispatch(evaluateDraw())                                // Check for Draw
