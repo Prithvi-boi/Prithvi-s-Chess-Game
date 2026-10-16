@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom'
+
 import Logo from "../../Component/Logo"
 import ExitIcon from "../../Assets/Icons/Navigation Icons/Exit Icon.svg?react"
-import Board from "../../Component/Board"
-import { useNavigate } from 'react-router-dom'
 import ResignIcon from '../../Assets/Icons/Resign.svg?react'
 import DrawIcon from '../../Assets/Icons/Draw.svg?react'
 import ArrowIcon from '../../Assets/Icons/Down.svg?react'
 
+import Board from "../../Component/Board"
+
+import { useSelector } from 'react-redux'
 
 export default function GamePage() {
   const navigate = useNavigate()
@@ -76,6 +79,8 @@ export function GameSection_PlayerCard({ reverse }) {
 
 export function MovesTracker() {
   let Move = ['e4', 'xd', 'a8']
+  let whiteMoves = useSelector(state => state.moveTracker.whiteMoves)
+  let blackMoves = useSelector(state => state.moveTracker.blackMoves)
   return (
     <div className="bg-bg-dark text-soft-white w-full h-full">
       <div className="flex justify-between px-5 py-4">
@@ -96,7 +101,7 @@ export function MovesTracker() {
 
       <div className="flex w-full">
         <div className="h-100 overflow-y-scroll w-full scrollbar-none">
-          {Move.map((val, i) => {
+          {whiteMoves.map((val, i) => {
             i = i + 1
             return (
               <div key={i} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex h-10 items-center pl-5`}>
@@ -107,7 +112,7 @@ export function MovesTracker() {
           })}
         </div>
         <div className="h-100 overflow-y-scroll w-full scrollbar-none">
-          {Move.map((val, i) => {
+          {blackMoves.map((val, i) => {
             i = i + 1
             return (
               <div key={i+3} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex justify-center gap-15 h-10 items-center px-5`}>

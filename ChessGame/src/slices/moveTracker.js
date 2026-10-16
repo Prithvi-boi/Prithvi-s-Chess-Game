@@ -8,7 +8,14 @@ const moveTrackerSlice = createSlice({
     },
     reducers: {
         addMove: (state, action) => {
-
+            const [move, symbol] = action.payload
+            const [color, piece] = [symbol[0], symbol[1]]
+            if (color == 'W') {
+                state.whiteMoves.push(move)
+            }
+            else{
+                state.blackMoves.push(move)
+            }
         }
     }
 })
