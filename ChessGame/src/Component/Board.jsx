@@ -13,7 +13,7 @@ const useBoard = () => useContext(BoardContext);
 // Redux - Hooks and Reducer Imports
 import { useDispatch, useSelector } from "react-redux";
 import { changePosition, handleCastle, evaluateDraw, setGameOver } from "../slices/piecesPosition.js";
-import { trackMove, markCheck, markCheckMate } from "../slices/moveTracker.js";
+import { trackMove, markCheck, markCheckMate, markCastle } from "../slices/moveTracker.js";
 
 // Logic Functions Imports
 import getAttackedSquares from "./Logic/Attacks.js";
@@ -94,7 +94,15 @@ function Board({ playAs = 'white' }) {
     else {
       // If User Click only on a Move or Kill blocks
       if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
-        if (killables.includes(ClikedPosition)) {
+        // ---- check ig king has Castled ----
+        const files = 'ABCDEFGH'
+        const fileDiff = files.indexOf(ClikedPosition[0]) - files.indexOf(LastCliked[0][0])
+        const castled = LastCliked[1][1] == 'K' && Math.abs(fileDiff) == 2
+        const castleSide = fileDiff > 0 ? 'O-O' : 'O-O-O'
+        // --------------------
+        if (castled) {
+          dispatch(markCastle([LastCliked[1],castleSide]))
+        } else if (killables.includes(ClikedPosition)) {
           dispatch(trackMove([ClikedPosition.toLowerCase(), LastCliked[1], true]));
         } else {
           dispatch(trackMove([ClikedPosition.toLowerCase(), LastCliked[1], false]));

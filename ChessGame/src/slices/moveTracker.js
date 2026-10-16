@@ -31,9 +31,16 @@ const moveTrackerSlice = createSlice({
             const i = list.length - 1
             if (i >= 0 && list[i].endsWith('+')) list[i] = list[i].slice(0, -1)
             if (i >= 0 && !list[i].endsWith('#')) list[i] += '#'
+        },
+
+        markCastle: (state, action) => {
+            const [symbol, val] = action.payload
+            const color = symbol[0]
+            const list = color == 'W' ? state.whiteMoves : state.blackMoves
+            list.push(val)
         }
     }
 })
 
 export default moveTrackerSlice.reducer
-export const { trackMove, markCheck, markCheckMate } = moveTrackerSlice.actions
+export const { trackMove, markCheck, markCheckMate, markCastle } = moveTrackerSlice.actions
