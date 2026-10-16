@@ -20,13 +20,13 @@ const moveTrackerSlice = createSlice({
 
         },
 
-        markCheck: (state, action) => { 
+        markCheck: (state, action) => {
             const list = action.payload == 'W' ? state.whiteMoves : state.blackMoves
             const i = list.length - 1
             if (i >= 0 && !list[i].endsWith('+')) list[i] += '+'
         },
 
-        markCheckMate: (state, action) => { 
+        markCheckMate: (state, action) => {
             const list = action.payload == 'W' ? state.whiteMoves : state.blackMoves
             const i = list.length - 1
             if (i >= 0 && list[i].endsWith('+')) list[i] = list[i].slice(0, -1)
@@ -38,9 +38,19 @@ const moveTrackerSlice = createSlice({
             const color = symbol[0]
             const list = color == 'W' ? state.whiteMoves : state.blackMoves
             list.push(val)
+        },
+
+        trackPromotion: (state, action) => {
+            const [symbol] = action.payload                  // e.g. 'WQ'
+            const color = symbol[0]
+            const piece = symbol[1]                          // Q, R, N or B
+            const list = color == 'W' ? state.whiteMoves : state.blackMoves
+            const i = list.length - 1
+            if (i < 0) return
+            list[i] = list[i].replace(/\+$/, '') + `=${piece}`   // drop any '+', then add =Q
         }
     }
 })
 
 export default moveTrackerSlice.reducer
-export const { trackMove, markCheck, markCheckMate, markCastle } = moveTrackerSlice.actions
+export const { trackMove, trackPromotion, markCheck, markCheckMate, markCastle } = moveTrackerSlice.actions
