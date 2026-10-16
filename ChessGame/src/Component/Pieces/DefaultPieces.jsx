@@ -14,11 +14,30 @@ import Black_Bishop from '../../Assets/Default Chess Pieces/Black_Bishop.svg?rea
 import Black_Knight from '../../Assets/Default Chess Pieces/Black_Rook-1.svg?react'
 import Black_Rook from '../../Assets/Default Chess Pieces/Black_Rook.svg?react'
 
-export default function DefaultPieces({ elmt, PromotionFlag = false, PromotionPiece = {color: null , file: null, PromotionCallback: ()=>{}} }) {
+const defaultPieceStyle = {
+    white: {
+        K: <White_King id={'WK'} />,
+        Q: <White_Queen id={'WQ'} />,
+        R: <White_Rook id={'WR'} />,
+        B: <White_Bishop id={'WB'} />,
+        N: <White_Knight id={'WN'} />,
+        P: <White_Pawn id={'WP'} />,
+    },
+    black: {
+        K: <Black_King id={'BK'} />,
+        Q: <Black_Queen id={'BQ'} />,
+        R: <Black_Rook id={'BR'} />,
+        B: <Black_Bishop id={'BB'} />,
+        N: <Black_Knight id={'BN'} />,
+        P: <Black_Pawn id={'BP'} />,
+    }
+}
+
+export default function DefaultPieces({ elmt, PromotionFlag = false, PromotionPiece = { color: null, file: null, PromotionCallback: () => { } } }) {
     const pieceSize = 'h-[10vw] w-full lg:h-full md:h-full'
     const piecesPosition = useSelector(state => state.piecesPosition.value)
-    const {color , file, PromotionCallback} = PromotionPiece
-    return ( 
+    const { color, file, PromotionCallback } = PromotionPiece
+    return (
         <>
             {PromotionFlag == false ?
                 <>
@@ -40,7 +59,7 @@ export default function DefaultPieces({ elmt, PromotionFlag = false, PromotionPi
                 <>
                     <PawnPromotion color={color} file={file} PromotionCallback={PromotionCallback} />
                 </>
-                }
+            }
         </>
     )
 }
@@ -68,6 +87,39 @@ export function PawnPromotion({ color, file, PromotionCallback }) {
                     <div onClick={() => { dispatch(handlePawnPromotion(['BN', file])), PromotionCallback() }}><Black_Knight className={pieceStyle} /></div>
                     <div onClick={() => { dispatch(handlePawnPromotion(['BB', file])), PromotionCallback() }}><Black_Bishop className={pieceStyle} /> </div>
                 </>}
+        </div>
+    )
+}
+
+export function CapturesBlock({ black }) {
+    const whiteCaptures = useSelector(state => state.piecesPosition.whiteCaptures)
+    const blackCaptures = useSelector(state => state.piecesPosition.blackCaptures)
+    return (
+        <div className='h-full w-full'>
+            {black
+                ?
+                <>
+                    {blackCaptures.map((val, i) => {
+                        const svg = defaultPieceStyle.white[val[1]]
+                        return (
+                            <div key={i}>
+                                {svg}
+                            </div>
+                        )
+                    })}
+                </>
+                :
+                <>
+                    {whiteCaptures.map((val, i) => {
+                        const svg = defaultPieceStyle.black[val[1]]
+                        return (
+                            <div key={i}>
+                                {svg}
+                            </div>
+                        )
+                    })}
+                </>
+            }
         </div>
     )
 }

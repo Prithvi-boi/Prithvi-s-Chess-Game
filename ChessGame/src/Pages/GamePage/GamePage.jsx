@@ -6,6 +6,7 @@ import ResignIcon from '../../Assets/Icons/Resign.svg?react'
 import DrawIcon from '../../Assets/Icons/Draw.svg?react'
 import ArrowIcon from '../../Assets/Icons/Down.svg?react'
 
+import { CapturesBlock } from "../../Component/Pieces/DefaultPieces"
 
 export default function GamePage() {
   const navigate = useNavigate()
@@ -61,7 +62,9 @@ export function GameSection_PlayerCard({ reverse }) {
             <div className="h-7 md:h-5 md:w-10 w-full bg-[#3B3B3B] rounded-md"></div>
           </div>
 
-          <div className="h-10 md:h-7 md:w-[70%] lg:w-[50%] w-full bg-[#3B3B3B] rounded-md"></div>
+          <div className="h-10 md:h-7 md:w-[70%] lg:w-[50%] w-full bg-[#3B3B3B] rounded-md">
+            <CapturesBlock black={reverse}/>
+          </div>
         </div>
 
         {/* Rating and Time*/}

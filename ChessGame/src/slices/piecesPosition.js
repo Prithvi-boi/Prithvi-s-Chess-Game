@@ -18,6 +18,8 @@ const piecesPositionReducer = createSlice({
             BlackRook: ['a8', 'h8'],
             BlackPawn: ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'h7', 'g7'],
         },
+        whiteCaptures: [],
+        blackCaptures: [],
         castle: {
             White: {
                 right: true,
@@ -83,6 +85,11 @@ const piecesPositionReducer = createSlice({
                 const element = state.value[key];
                 if (element.includes(target[0].toLowerCase())) {
                     const j = element.indexOf(target[0].toLowerCase());
+                    if (target[1][1][0] == 'W') {                        
+                        state.whiteCaptures.push('B'+key[5]);
+                    }else{
+                        state.blackCaptures.push('W'+key[5])
+                    }
                     element[j] = ''
                 }
             }
