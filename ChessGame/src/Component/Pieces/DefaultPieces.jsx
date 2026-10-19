@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
+import React from 'react';
 
 import White_Pawn from '../../Assets/Default Chess Pieces/White_Pawn.svg?react'
 import White_King from '../../Assets/Default Chess Pieces/White_King.svg?react'
@@ -16,44 +17,44 @@ import Black_Rook from '../../Assets/Default Chess Pieces/Black_Rook.svg?react'
 
 const defaultPieceStyle = {
     white: {
-        K: <White_King id={'WK'} />,
-        Q: <White_Queen id={'WQ'} />,
-        R: <White_Rook id={'WR'} />,
-        B: <White_Bishop id={'WB'} />,
-        N: <White_Knight id={'WN'} />,
-        P: <White_Pawn id={'WP'} />,
+        K: <White_King />,
+        Q: <White_Queen />,
+        R: <White_Rook />,
+        B: <White_Bishop />,
+        N: <White_Knight />,
+        P: <White_Pawn />,
     },
     black: {
-        K: <Black_King id={'BK'} />,
-        Q: <Black_Queen id={'BQ'} />,
-        R: <Black_Rook id={'BR'} />,
-        B: <Black_Bishop id={'BB'} />,
-        N: <Black_Knight id={'BN'} />,
-        P: <Black_Pawn id={'BP'} />,
+        K: <Black_King />,
+        Q: <Black_Queen />,
+        R: <Black_Rook />,
+        B: <Black_Bishop />,
+        N: <Black_Knight />,
+        P: <Black_Pawn />,
     }
 }
 
 export default function DefaultPieces({ elmt, PromotionFlag = false, PromotionPiece = { color: null, file: null, PromotionCallback: () => { } } }) {
-    const pieceSize = 'h-[10vw] w-full lg:h-full md:h-full'
+
     const piecesPosition = useSelector(state => state.piecesPosition.value)
+    const [pieceStyle, setPieceStyle] = useState(defaultPieceStyle)
+    const pieceSize = 'h-[10vw] w-full lg:h-full md:h-full'
+
     const { color, file, PromotionCallback } = PromotionPiece
     return (
         <>
             {PromotionFlag == false ?
                 <>
-                    {piecesPosition.WhitePawn.includes(elmt) && <White_Pawn id={'WP'} className={pieceSize} />}
-                    {piecesPosition.WhiteKing.includes(elmt) && <White_King id={'WK'} className={pieceSize} />}
-                    {piecesPosition.WhiteQueen.includes(elmt) && <White_Queen id={'WQ'} className={pieceSize} />}
-                    {piecesPosition.WhiteNight.includes(elmt) && <White_Knight id={'WN'} className={pieceSize} />}
-                    {piecesPosition.WhiteBishop.includes(elmt) && <White_Bishop id={'WB'} className={pieceSize} />}
-                    {piecesPosition.WhiteRook.includes(elmt) && <White_Rook id={'WR'} className={pieceSize} />}
-
-                    {piecesPosition.BlackPawn.includes(elmt) && <Black_Pawn id={'BP'} className={pieceSize} />}
-                    {piecesPosition.BlackKing.includes(elmt) && <Black_King id={'BK'} className={pieceSize} />}
-                    {piecesPosition.BlackQueen.includes(elmt) && <Black_Queen id={'BQ'} className={pieceSize} />}
-                    {piecesPosition.BlackNight.includes(elmt) && <Black_Knight id={'BN'} className={pieceSize} />}
-                    {piecesPosition.BlackBishop.includes(elmt) && <Black_Bishop id={'BB'} className={pieceSize} />}
-                    {piecesPosition.BlackRook.includes(elmt) && <Black_Rook id={'BR'} className={pieceSize} />}
+                    {Object.entries(piecesPosition).map(([key, value]) => {
+                        if (!value.includes(elmt)) return null
+                        const k = key[0] + key[5]
+                        const color = key[0] === 'W' ? pieceStyle.white : pieceStyle.black;
+                        return React.cloneElement(color[key[5]], {
+                            key: k,
+                            id: k,
+                            className: pieceSize
+                        });
+                    })}
                 </>
                 :
                 <>
@@ -65,6 +66,7 @@ export default function DefaultPieces({ elmt, PromotionFlag = false, PromotionPi
 }
 
 import { handlePawnPromotion } from '../../slices/piecesPosition'
+import { useEffect, useState } from 'react'
 
 export function PawnPromotion({ color, file, PromotionCallback }) {
     let pieceStyle = 'h-[10vw] w-full border border-black'
