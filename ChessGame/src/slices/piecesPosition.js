@@ -122,11 +122,11 @@ const piecesPositionReducer = createSlice({
             const element = state.value[color == 'W' ? 'WhiteRook' : 'BlackRook']
 
             // rook jumps ONLY when the king moved two files from E
-            if (fromFile == 'E' && toFile == 'C') {
+            if (fromFile == 'E' && toFile == 'C') { // Queen Side
                 const j = element.indexOf(`a${rank}`)
                 if (j !== -1) element[j] = `d${rank}`
             }
-            if (fromFile == 'E' && toFile == 'G') {
+            if (fromFile == 'E' && toFile == 'G') { // king side
                 const j = element.indexOf(`h${rank}`)
                 if (j !== -1) element[j] = `f${rank}`
             }

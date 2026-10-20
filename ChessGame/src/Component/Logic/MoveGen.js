@@ -1,5 +1,6 @@
 import { store } from '../../store'
 import getAttackedSquares from './Attacks.js'
+import { markCastle } from '../../slices/moveTracker.js'
 
 export default function MoveGen(position, Selected_piece, MoveGenCallback, lastMove) {
     let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']

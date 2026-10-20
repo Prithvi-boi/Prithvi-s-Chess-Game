@@ -13,6 +13,7 @@ const useBoard = () => useContext(BoardContext);
 // Redux - Hooks and Reducer Imports
 import { useDispatch, useSelector } from "react-redux";
 import { changePosition, handleCastle, evaluateDraw, setGameOver } from "../slices/piecesPosition.js";
+import { trackMove, markCheck, markCheckMate, markCastle } from "../slices/moveTracker.js";
 
 // Logic Functions Imports
 import getAttackedSquares from "./Logic/Attacks.js";
@@ -93,7 +94,19 @@ function Board({ playAs = 'white' }) {
     else {
       // If User Click only on a Move or Kill blocks
       if (nextMoves.includes(ClikedPosition) || killables.includes(ClikedPosition)) {
-
+        // ---- check ig king has Castled ----
+        const files = 'ABCDEFGH'
+        const fileDiff = files.indexOf(ClikedPosition[0]) - files.indexOf(LastCliked[0][0])
+        const castled = LastCliked[1][1] == 'K' && Math.abs(fileDiff) == 2
+        const castleSide = fileDiff > 0 ? 'O-O' : 'O-O-O'
+        // --------------------
+        if (castled) {
+          dispatch(markCastle([LastCliked[1],castleSide]))
+        } else if (killables.includes(ClikedPosition)) {
+          dispatch(trackMove([ClikedPosition.toLowerCase(), LastCliked[1], true]));
+        } else {
+          dispatch(trackMove([ClikedPosition.toLowerCase(), LastCliked[1], false]));
+        }
         dispatch(changePosition([ClikedPosition, LastCliked]))  // Move the Piece
         dispatch(handleCastle([ClikedPosition[0], LastCliked])) // Check for castle then Move King & rook
         dispatch(evaluateDraw())                                // Check for Draw
@@ -104,13 +117,15 @@ function Board({ playAs = 'white' }) {
         let lastrank = LastCliked[1][0] == 'W' ? '8' : '1'
         if (LastCliked[1][1] == 'P' && ClikedPosition[1] == lastrank) {
           setPromotion([
-              <DefaultPieces 
-                PromotionFlag={true} 
-                PromotionPiece={{ color: LastCliked[1][0], file: ClikedPosition, 
-                PromotionCallback: () => setPromotion([]) }} 
-              />, 
-              ClikedPosition
-            ])
+            <DefaultPieces
+              PromotionFlag={true}
+              PromotionPiece={{
+                color: LastCliked[1][0], file: ClikedPosition,
+                PromotionCallback: () => setPromotion([])
+              }}
+            />,
+            ClikedPosition
+          ])
         }
 
         // After Moving or Killing the piece. Set Both state to empty
@@ -123,6 +138,7 @@ function Board({ playAs = 'white' }) {
   //____________ Game Over and Draw Logic ____________ //
   //////////////////////////////////////////////////////
   useEffect(() => {
+    dispatch(markCheckMate(enemy))
     if (gameOver) setTimeout(() => alert(gameOver), 100)
   }, [gameOver])
 
@@ -137,6 +153,11 @@ function Board({ playAs = 'white' }) {
         : 'Stalemate! Draw'
     ))
   }, [pieces, Turn, promotion])
+
+  useEffect(() => {
+    if (!lastMoveRef.current) return
+    if (checkedSquare) dispatch(markCheck(enemy))
+  }, [pieces, Turn])
 
   //////////////////////////////////////////////////
   return (
