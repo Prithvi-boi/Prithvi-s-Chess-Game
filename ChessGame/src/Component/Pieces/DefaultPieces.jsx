@@ -103,32 +103,25 @@ export function PawnPromotion({ color, file, PromotionCallback }) {
 export function CapturesBlock({ black }) {
     const whiteCaptures = useSelector(state => state.piecesPosition.whiteCaptures)
     const blackCaptures = useSelector(state => state.piecesPosition.blackCaptures)
+
+    const svg = black ? defaultPieceStyle.white : defaultPieceStyle.black
+    const captureArry = black ? blackCaptures : whiteCaptures
+
+    const order = 'PNBRQK';
+    const sortedCapturesArry = [...captureArry].sort(
+        (a, b) => order.indexOf(a[1]) - order.indexOf(b[1])
+    );
+
     return (
-        <div className='h-full w-full'>
-            {black
-                ?
-                <>
-                    {blackCaptures.map((val, i) => {
-                        const svg = defaultPieceStyle.white[val[1]]
-                        return (
-                            <div key={i}>
-                                {svg}
-                            </div>
-                        )
-                    })}
-                </>
-                :
-                <>
-                    {whiteCaptures.map((val, i) => {
-                        const svg = defaultPieceStyle.black[val[1]]
-                        return (
-                            <div key={i}>
-                                {svg}
-                            </div>
-                        )
-                    })}
-                </>
-            }
+        <div className={`h-full w-full flex pl-4`}>
+            <>
+                {sortedCapturesArry.map((val, i) => {
+                    return React.cloneElement(svg[val[1]], {
+                        key: i,
+                        className: `h-5 w-5 self-center ${val[1] == 'P' ? '-ml-[15px]' : '-ml-2'}`
+                    });
+                })}
+            </>
         </div>
     )
 }
