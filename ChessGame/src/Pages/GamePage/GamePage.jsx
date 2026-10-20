@@ -66,7 +66,7 @@ export function GameSection_PlayerCard({ reverse }) {
           </div>
 
           <div className="h-10 md:h-7 md:w-[70%] lg:w-[50%] w-full bg-[#3B3B3B] rounded-md">
-            <CapturesBlock black={reverse}/>
+            <CapturesBlock black={!reverse}/>
           </div>
         </div>
 
