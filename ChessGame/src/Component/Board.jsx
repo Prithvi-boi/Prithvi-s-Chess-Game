@@ -36,6 +36,8 @@ function Board({ playAs = 'white' }) {
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
   let darkSquares = []
+  const [switchBoard, setswitchBoard] = useState('white')
+
 
   /*Creating files and Rank (A1,B2,E4,D3....)*/
   for (let i = 0; i < numbers.length; i++) {
@@ -44,7 +46,7 @@ function Board({ playAs = 'white' }) {
       darkSquares.push(element)
     }
   }
-  if (playAs == 'white') { darkSquares = darkSquares.reverse() }
+  if (playAs == switchBoard) { darkSquares = darkSquares.reverse() } // black
 
 
   //____________ Game Logic and Current Values ____________ //
@@ -53,6 +55,7 @@ function Board({ playAs = 'white' }) {
   const gameOver = useSelector(state => state.piecesPosition.gameOver)
   const pieces = useSelector(state => state.piecesPosition.value)
   const Turn = useSelector(state => state.piecesPosition.moves % 2 == 0 ? 'W' : 'B')
+  const switchPlay = useSelector((state) => state.gameMode.switchPlay)
 
   // Conditional variables
   const enemy = Turn == 'W' ? 'B' : 'W'                                               // Checks the current opponent
@@ -128,6 +131,9 @@ function Board({ playAs = 'white' }) {
           ])
         }
 
+        if (switchPlay) {
+          setswitchBoard(c => c == 'white' ? 'black' : 'white')
+        }
         // After Moving or Killing the piece. Set Both state to empty
         setNextMoves([])
         setkillables([])
@@ -162,7 +168,7 @@ function Board({ playAs = 'white' }) {
   //////////////////////////////////////////////////
   return (
     <div aria-label="Board" className={`BoardStyle bg-[#3A1A0C] border-y-4  border-[#634833]`}>
-      <BoardContext.Provider value={{ reverse: playAs === "white" }}>
+      <BoardContext.Provider value={{ reverse: playAs === switchBoard }}>
         <Coords row={1} col={2} deg={180} />
         <Coords row={3} col={2} deg={0} />
         <Coords row={2} col={1} deg={0} grid_col={true} num={true} />
@@ -172,7 +178,7 @@ function Board({ playAs = 'white' }) {
       <div className="row-start-2 col-start-2 bg-[#3A1A0C] border-2 border-[#634833]">
         <div className=" grid grid-rows-8 grid-cols-8 h-full w-full bg-[#E9E9DF]">
           {darkSquares.map((elmt, i) => {
-            let num = Number(elmt[1])
+            let num = switchBoard == 'white' ? Number(elmt[1]) : Number(elmt[1]) + 1
             let color;
             if (num % 2 == 0) { color = i % 2 == 0 ? 'bg-[#E9E9DF]' : 'bg-[#BB9979]' }
             else { color = i % 2 == 0 ? 'bg-[#BB9979]' : 'bg-[#E9E9DF]' }
