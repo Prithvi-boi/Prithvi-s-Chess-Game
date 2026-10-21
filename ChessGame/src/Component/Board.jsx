@@ -14,6 +14,8 @@ const useBoard = () => useContext(BoardContext);
 import { useDispatch, useSelector } from "react-redux";
 import { changePosition, handleCastle, evaluateDraw, setGameOver } from "../slices/piecesPosition.js";
 import { trackMove, markCheck, markCheckMate, markCastle } from "../slices/moveTracker.js";
+import { setswitchBoard } from "../slices/setGameMode.js"
+
 
 // Logic Functions Imports
 import getAttackedSquares from "./Logic/Attacks.js";
@@ -36,7 +38,7 @@ function Board({ playAs = 'white' }) {
   const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].reverse()
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8]
   let darkSquares = []
-  const [switchBoard, setswitchBoard] = useState('white')
+  const switchBoard = useSelector(state => state.gameMode.switchColor)
 
 
   /*Creating files and Rank (A1,B2,E4,D3....)*/
@@ -132,7 +134,7 @@ function Board({ playAs = 'white' }) {
         }
 
         if (switchPlay) {
-          setswitchBoard(c => c == 'white' ? 'black' : 'white')
+          dispatch(setswitchBoard())
         }
         // After Moving or Killing the piece. Set Both state to empty
         setNextMoves([])

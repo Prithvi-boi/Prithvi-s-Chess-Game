@@ -12,6 +12,8 @@ import Board from "../../Component/Board"
 import { useSelector } from 'react-redux'
 
 export default function GamePage() {
+  const switchCard = useSelector(state => state.gameMode.switchColor)
+
   const navigate = useNavigate()
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
@@ -27,9 +29,9 @@ export default function GamePage() {
         <div className="w-full bg-[#1d1d1d]">
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
-            <GameSection_PlayerCard />
+            <GameSection_PlayerCard PlayerInfo={['Prithvi','India']} reverse={switchCard == 'black' ? true : false}/>
             <Board />
-            <GameSection_PlayerCard reverse={true} />
+            <GameSection_PlayerCard PlayerInfo={['Vicky','India']} reverse={switchCard == 'white' ? true : false} />
           </div>
 
         </div>
@@ -48,12 +50,13 @@ export default function GamePage() {
 }
 
 
-export function GameSection_PlayerCard({ reverse }) {
+export function GameSection_PlayerCard({ reverse, PlayerInfo }) {
+  const [name, country] = PlayerInfo
   const reverseCardCss = 'rounded-b-md'
   return (
     <>
       {/* Profile Pic */}
-      <div className="bg-bg-dark h-25 md:h-20 w-full grid grid-cols-[1fr_3fr_2fr] lg:grid-cols-[0.5fr_2fr_1fr] px-2 place-items-center gap-2">
+      <div className={`${reverse ? 'row-start-3' : 'row-start-1'} bg-bg-dark h-25 md:h-20 w-full grid grid-cols-[1fr_3fr_2fr] lg:grid-cols-[0.5fr_2fr_1fr] px-2 place-items-center gap-2`}>
         <div className="bg-soft-white rounded-xl h-13 w-13 md:h-9 md:w-9 md:rounded-sm">
           <img></img>
         </div>
@@ -61,7 +64,7 @@ export function GameSection_PlayerCard({ reverse }) {
         {/* User Details and Captures*/}
         <div className="flex flex-col gap-2 w-full">
           <div className="grid grid-cols-[auto_3rem] gap-1.5 md:gap-2 md:flex place-items-center">
-            <p className="text-white font-extrabold text-[0.7em]">PrithviOpinChess</p>
+            <p className="text-white font-extrabold text-[0.7em]">{name}</p>
             <div className="h-7 md:h-5 md:w-10 w-full bg-[#3B3B3B] rounded-md"></div>
           </div>
 

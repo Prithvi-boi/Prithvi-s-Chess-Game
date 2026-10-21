@@ -5,7 +5,8 @@ const gameModeReducer = createSlice({
     initialState: {
         value: 'rapid',
         playas: 'white',
-        switchPlay: false
+        switchPlay: false,
+        switchColor: 'white'
     },
     reducers:{
         setGameMode: (state,action) => {
@@ -16,9 +17,12 @@ const gameModeReducer = createSlice({
         },
         setSwitchPlay: (state) => {
             state.switchPlay = !state.switchPlay
+        },
+        setswitchBoard: (state) => {
+            state.switchColor = state.switchColor == 'white' ? 'black' : 'white'
         }
     }
 })
 
 export default gameModeReducer.reducer
-export const { setGameMode, setPlayAs, setSwitchPlay } = gameModeReducer.actions
+export const { setGameMode, setPlayAs, setSwitchPlay, setswitchBoard } = gameModeReducer.actions
