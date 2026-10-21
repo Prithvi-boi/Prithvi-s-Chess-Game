@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { useLayoutEffect } from 'react'
 
 import Logo from "../../Component/Logo"
 import ExitIcon from "../../Assets/Icons/Navigation Icons/Exit Icon.svg?react"
@@ -13,7 +14,9 @@ import { useSelector } from 'react-redux'
 
 export default function GamePage() {
   const switchCard = useSelector(state => state.gameMode.switchColor)
-
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 130, behavior: 'instant' })
+  }, [])
   const navigate = useNavigate()
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
@@ -29,9 +32,9 @@ export default function GamePage() {
         <div className="w-full bg-[#1d1d1d]">
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
-            <GameSection_PlayerCard PlayerInfo={['Prithvi','India']} reverse={switchCard == 'black' ? true : false}/>
+            <GameSection_PlayerCard PlayerInfo={['Prithvi', 'India']} reverse={switchCard == 'black' ? true : false} />
             <Board />
-            <GameSection_PlayerCard PlayerInfo={['Vicky','India']} reverse={switchCard == 'white' ? true : false} />
+            <GameSection_PlayerCard PlayerInfo={['Vicky', 'India']} reverse={switchCard == 'white' ? true : false} />
           </div>
 
         </div>
@@ -69,7 +72,7 @@ export function GameSection_PlayerCard({ reverse, PlayerInfo }) {
           </div>
 
           <div className="h-10 md:h-7 md:w-[70%] lg:w-[50%] w-full bg-[#3B3B3B] rounded-md">
-            <CapturesBlock black={!reverse}/>
+            <CapturesBlock black={!reverse} />
           </div>
         </div>
 
@@ -121,7 +124,7 @@ export function MovesTracker() {
           {blackMoves.map((val, i) => {
             i = i + 1
             return (
-              <div key={i+3} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex justify-center gap-15 h-10 items-center px-5`}>
+              <div key={i + 3} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex justify-center gap-15 h-10 items-center px-5`}>
                 <span>{val}</span>
               </div>
             )

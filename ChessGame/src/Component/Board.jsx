@@ -169,7 +169,7 @@ function Board({ playAs = 'white' }) {
 
   //////////////////////////////////////////////////
   return (
-    <div aria-label="Board" className={`BoardStyle bg-[#3A1A0C] border-y-4  border-[#634833]`}>
+    <div aria-label="Board" className={`BoardStyle [overflow-anchor:none] bg-[#3A1A0C] border-y-4  border-[#634833]`}>
       <BoardContext.Provider value={{ reverse: playAs === switchBoard }}>
         <Coords row={1} col={2} deg={180} />
         <Coords row={3} col={2} deg={0} />
