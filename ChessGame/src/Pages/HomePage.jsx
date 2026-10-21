@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setGameMode, setPlayAs } from "../slices/setGameMode.js"
+import { setGameMode, setPlayAs, setSwitchPlay } from "../slices/setGameMode.js"
 
 import ChessLogo from "../../public/Downloads/ChessLogo.png"
 import Button from "../Component/Button.jsx"
@@ -86,6 +86,9 @@ function PlayOffline_Section() {
     const dispatch = useDispatch()
     const PlayingAs = useSelector((state) => state.gameMode.playas)
     const gameMode = useSelector((state) => state.gameMode.value)
+    const switchPlay = useSelector((state) => state.gameMode.switchPlay)
+    console.log(switchPlay);
+    
     return (
         <div className="mt-5 flex flex-col gap-4">
             {/* Select Game mode */}
@@ -158,7 +161,9 @@ function PlayOffline_Section() {
                     <BoxCard styles={'col-span-3 items-start px-5 text-sm text-white w-full' }>
                         <div className="flex gap-4 items-center">
                             <p>Switch Play</p>
-                            <Toggle />
+                            <div onClick={() => dispatch(setSwitchPlay())}>
+                                <Toggle />
+                            </div>
                         </div>
                     </BoxCard>
                 </div>
