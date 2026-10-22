@@ -27,7 +27,7 @@ import DefaultPieces from "./Pieces/DefaultPieces.jsx"
     Main Game Function (Board)
 ---------------------------------*/
 
-function Board({ playAs = 'white' }) {
+function Board({ playAs = 'white', gameOverCallback }) {
 
   const dispatch = useDispatch()
 
@@ -101,7 +101,7 @@ function Board({ playAs = 'white' }) {
         const castleSide = fileDiff > 0 ? 'O-O' : 'O-O-O'
         // --------------------
         if (castled) {
-          dispatch(markCastle([LastCliked[1],castleSide]))
+          dispatch(markCastle([LastCliked[1], castleSide]))
         } else if (killables.includes(ClikedPosition)) {
           dispatch(trackMove([ClikedPosition.toLowerCase(), LastCliked[1], true]));
         } else {
@@ -139,6 +139,7 @@ function Board({ playAs = 'white' }) {
   //////////////////////////////////////////////////////
   useEffect(() => {
     dispatch(markCheckMate(enemy))
+    if (gameOver) {gameOverCallback()}
     if (gameOver) setTimeout(() => alert(gameOver), 100)
   }, [gameOver])
 

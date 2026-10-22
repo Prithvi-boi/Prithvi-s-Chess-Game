@@ -10,11 +10,22 @@ import { CapturesBlock } from "../../Component/Pieces/DefaultPieces"
 import Board from "../../Component/Board"
 
 import { useSelector } from 'react-redux'
+import GameOver from '../../Component/GameOver'
+import { useState } from 'react'
 
 export default function GamePage() {
   const navigate = useNavigate()
+  const [gameOver, setgameOver] = useState(false)
+  console.log(gameOver);
+  
+  const handleGameOver = () => {
+    setgameOver(true)
+
+    
+  }
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
+      {gameOver && <GameOver />}
       {/* Heading and Navigation */}
       <div className="flex justify-between p-5 lg:px-50 lg:py-0">
         <Logo style={"mr-auto text-[25px] lg:text-[30px]  xl:pl-50"} />
@@ -28,7 +39,7 @@ export default function GamePage() {
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
             <GameSection_PlayerCard />
-            <Board />
+            <Board gameOverCallback={handleGameOver}/>
             <GameSection_PlayerCard reverse={true} />
           </div>
 
@@ -66,7 +77,7 @@ export function GameSection_PlayerCard({ reverse }) {
           </div>
 
           <div className="h-10 md:h-7 md:w-[70%] lg:w-[50%] w-full bg-[#3B3B3B] rounded-md">
-            <CapturesBlock black={!reverse}/>
+            <CapturesBlock black={!reverse} />
           </div>
         </div>
 
@@ -118,7 +129,7 @@ export function MovesTracker() {
           {blackMoves.map((val, i) => {
             i = i + 1
             return (
-              <div key={i+3} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex justify-center gap-15 h-10 items-center px-5`}>
+              <div key={i + 3} className={`${i % 2 == 0 ? 'bg-background' : 'bg-bg-dark'} flex justify-center gap-15 h-10 items-center px-5`}>
                 <span>{val}</span>
               </div>
             )
