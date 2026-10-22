@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setGameMode, setPlayAs } from "../slices/setGameMode.js"
+import { setGameMode, setPlayAs, setSwitchPlay } from "../slices/setGameMode.js"
 
 import ChessLogo from "../../public/Downloads/ChessLogo.png"
 import Button from "../Component/Button.jsx"
 import GameHistory from "../Features/GameHistory.jsx"
+import Toggle from "../Component/Toggle.jsx"
 
 import { BoxCard } from "./RatingPage.jsx"
 import BulletIcon from "../Assets/Icons/RatingsIcons/BulletIcon.svg?react"
@@ -17,6 +18,7 @@ import PlayOnlineIcon from "../Assets/Icons/Play Online Icon.svg?react"
 import PlayOfflineIcon from "../Assets/Icons/Players Icon.svg?react"
 import PlayBotIcon from "../Assets/Icons/Bot Icon.svg?react"
 import { useNavigate } from "react-router-dom"
+
 
 function HomePage() {
     const [showSection, setShowSection] = useState(true)
@@ -84,6 +86,9 @@ function PlayOffline_Section() {
     const dispatch = useDispatch()
     const PlayingAs = useSelector((state) => state.gameMode.playas)
     const gameMode = useSelector((state) => state.gameMode.value)
+    const switchPlay = useSelector((state) => state.gameMode.switchPlay)
+    console.log(switchPlay);
+    
     return (
         <div className="mt-5 flex flex-col gap-4">
             {/* Select Game mode */}
@@ -93,17 +98,17 @@ function PlayOffline_Section() {
                 <div className="grid grid-cols-3 grid-rows-2 gap-2 text-white">
                     <div onClick={()=> dispatch(setGameMode('rapid'))} className={`${gameMode == 'rapid' && selectedCss}`}>
                         <BoxCard Icon={<StopwatchIcon />} title={"Rapid"}>
-                            <div className="rounded-sm border-2 border-[#989696] bg-[#838383]">10 min</div>
+                            <div className="rounded-sm border-2 px-1 sm:px-6 lg:px-10 border-[#989696] bg-[#838383]">10 min</div>
                         </BoxCard>
                     </div>
                     <div onClick={()=> dispatch(setGameMode('blitz'))} className={`${gameMode == 'blitz' && selectedCss}`}>
                         <BoxCard Icon={<LightingBoltIcon />} title={"Blitz"}>
-                            <div className="rounded-sm border-2 border-[#989696] bg-[#838383]">5 min</div>
+                            <div className="rounded-sm border-2 px-1 sm:px-6 lg:px-10 border-[#989696] bg-[#838383]">5 min</div>
                         </BoxCard>
                     </div>
                     <div onClick={()=> dispatch(setGameMode('bullet'))} className={`${gameMode == 'bullet' && selectedCss}`}>
                         <BoxCard Icon={<BulletIcon />} title={"Bullet"}>
-                            <div className="rounded-sm border-2 border-[#989696] bg-[#838383]">1 min</div>
+                            <div className="rounded-sm border-2 px-1 sm:px-6 lg:px-10 border-[#989696] bg-[#838383]">1 min</div>
                         </BoxCard>
                     </div>
                     <div onClick={()=> dispatch(setGameMode('custom'))} className={`${gameMode == 'custom' && selectedCss} col-span-3`}>
@@ -112,9 +117,9 @@ function PlayOffline_Section() {
                         </BoxCard>
                     </div>
                 </div>
-            </div>
+            </div> 
 
-            {/* Select Game mode */}
+            {/* Player Settings */}
             <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
                 <h2 className="text-[#848484] text-xl">Player Settings</h2>
                 <hr />
@@ -122,11 +127,11 @@ function PlayOffline_Section() {
                     <BoxCard Icon={<UsersIcon/>} title={"Player Names"} styles={'col-span-3 items-start px-5 text-sm text-white w-full' }>
                         <div className="flex gap-4 items-center">
                             <p>Player 1:</p>
-                            <input type="number" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Value (in Min)"/>
+                            <input type="text" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Player 1 name"/>
                         </div>
                         <div className="flex gap-4 items-center">
                             <p>Player 2:</p>
-                            <input type="number" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Value (in Min)"/>
+                            <input type="text" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Player 2 name"/>
                         </div>
                     </BoxCard>
 
@@ -143,6 +148,22 @@ function PlayOffline_Section() {
                             <div className={`h-10 w-full rounded-xl grid place-items-center ${PlayingAs === 'white' ? 'bg-white text-gray-600': 'bg-black text-gray-400'} `}>{PlayingAs}</div>
                             <p>Player 1</p>
                             <p>Player 2</p>
+                        </div>
+                    </BoxCard>
+                </div>
+            </div>
+            
+            {/* Game Settings */}
+            <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
+                <h2 className="text-[#848484] text-xl">Game Settings</h2>
+                <hr />
+                <div className="grid grid-cols-3 grid-rows-2 gap-2 w-full">
+                    <BoxCard styles={'col-span-3 items-start px-5 text-sm text-white w-full' }>
+                        <div className="flex gap-4 items-center">
+                            <p>Switch Play</p>
+                            <div onClick={() => dispatch(setSwitchPlay())}>
+                                <Toggle />
+                            </div>
                         </div>
                     </BoxCard>
                 </div>
