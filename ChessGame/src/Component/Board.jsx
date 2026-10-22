@@ -149,7 +149,7 @@ function Board({ playAs = 'white', gameOverCallback }) {
   //////////////////////////////////////////////////////
   useEffect(() => {
     dispatch(markCheckMate(enemy))
-    if (gameOver) {gameOverCallback()}
+    if (gameOver) {gameOverCallback(switchBoard, 'Checkmate!')}
     if (gameOver) setTimeout(() => alert(gameOver), 100)
   }, [gameOver])
 

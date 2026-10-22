@@ -2,16 +2,17 @@
 import White_Pawn from '../Assets/Default Chess Pieces/White_Pawn.svg?react'
 import Black_Pawn from '../Assets/Default Chess Pieces/Black_Pawn.svg?react'
 
-function GameOver({ whoWon = 'error', reason = 'error' }) {
+function GameOver({ whoWon = 'error', reason = 'error', exitNav }) {
+    const winner = whoWon == 'white' ? 'black' : 'white'
     const svgstyle = 'h-12 w-12'
-    const svg = whoWon == 'white' ? <White_Pawn className={svgstyle} /> : <Black_Pawn className={svgstyle} />
+    const svg = whoWon != 'white' ? <White_Pawn className={svgstyle} /> : <Black_Pawn className={svgstyle} />
     return (
         <div className='fixed h-screen w-screen bg-[#000000b6] z-99 -mt-10 flex justify-center items-center'>
             <div className='flex flex-col gap-2 items-center h-120 w-100 bg-background rounded-2xl p-5'>
                 <div className='flex items-center'>
                     {svg}
                     <h2 className='text-white font-extrabold text-4xl'>
-                        {whoWon.charAt(0).toUpperCase() + whoWon.slice(1)} Won!
+                        {winner.charAt(0).toUpperCase() + winner.slice(1)} Won!
                     </h2>
                 </div>
 
@@ -22,7 +23,7 @@ function GameOver({ whoWon = 'error', reason = 'error' }) {
                 </div>
 
                 <div className='flex gap-5 mt-10'>
-                    <button className='h-14 w-30 bg-[#5f5f5f] font-bold text-white rounded-lg'>Quit</button>
+                    <button onClick={() => exitNav('/home')} className='h-14 w-30 bg-[#5f5f5f] font-bold text-white rounded-lg'>Quit</button>
                     <button className='h-14 w-30 bg-[#5f5f5f] font-bold text-white rounded-lg'>Rematch</button>
                 </div>
             </div>

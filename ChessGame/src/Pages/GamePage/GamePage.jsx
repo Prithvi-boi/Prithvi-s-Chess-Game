@@ -23,16 +23,14 @@ export default function GamePage() {
   }, [])
   const navigate = useNavigate()
   const [gameOver, setgameOver] = useState(false)
-  console.log(gameOver);
-  
-  const handleGameOver = () => {
+  const [gameOverCard, setgameOverCard] = useState(null)
+  const handleGameOver = (whoWon, reason) => {
     setgameOver(true)
-
-    
+    setgameOverCard(<GameOver whoWon={whoWon} reason={reason} exitNav={navigate}/>)
   }
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
-      {gameOver && <GameOver />}
+      {gameOver && gameOverCard}
       {/* Heading and Navigation */}
       <div className="flex justify-between p-5 lg:px-50 lg:py-0">
         <Logo style={"mr-auto text-[25px] lg:text-[30px]  xl:pl-50"} />
