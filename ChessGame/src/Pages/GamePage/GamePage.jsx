@@ -5,6 +5,7 @@ import ExitIcon from "../../Assets/Icons/Navigation Icons/Exit Icon.svg?react"
 import ResignIcon from '../../Assets/Icons/Resign.svg?react'
 import DrawIcon from '../../Assets/Icons/Draw.svg?react'
 import ArrowIcon from '../../Assets/Icons/Down.svg?react'
+import Timer from '../../Component/Timer'
 
 import { CapturesBlock } from "../../Component/Pieces/DefaultPieces"
 import Board from "../../Component/Board"
@@ -27,7 +28,7 @@ export default function GamePage() {
         <div className="w-full bg-[#1d1d1d]">
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
-            <GameSection_PlayerCard />
+            <GameSection_PlayerCard reverse={false}/>
             <Board />
             <GameSection_PlayerCard reverse={true} />
           </div>
@@ -72,8 +73,8 @@ export function GameSection_PlayerCard({ reverse }) {
 
         {/* Rating and Time*/}
         <div className={` px-1 h-full w-full flex flex-col items-center gap-2 ${!reverse && 'justify-end'}`}>
-          <div className={`h-8 md:h-6 w-[80%] md:w-[40%] bg-[#3B3B3B] rounded-md ${reverse && 'order-2'}`}></div>
-          <div className={`h-10 md:h-8 w-full md:w-[50%] bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md'}`}></div>
+          <div className={`h-8 md:h-6 w-[80%] md:w-[40%] bg-[#3B3B3B] rounded-md ${reverse && 'order-2'} font-bold text-stone-500 flex justify-center items-center`}>1500</div>
+          <div className={`h-10 md:h-8 w-full md:w-[50%] bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md'} flex justify-center items-center`}><Timer toggle={reverse}/></div>
         </div>
       </div>
     </>
