@@ -14,7 +14,8 @@ const useBoard = () => useContext(BoardContext);
 import { useDispatch, useSelector } from "react-redux";
 import { changePosition, handleCastle, evaluateDraw, setGameOver } from "../slices/piecesPosition.js";
 import { trackMove, markCheck, markCheckMate, markCastle } from "../slices/moveTracker.js";
-import { setswitchBoard, setSwitchTimer } from "../slices/setGameMode.js"
+import { setswitchBoard } from "../slices/setGameMode.js"
+import { setSwitchTimer } from "../slices/Ingame.js";
 
 
 // Logic Functions Imports

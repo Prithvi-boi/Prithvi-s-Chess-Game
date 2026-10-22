@@ -14,7 +14,7 @@ import Board from "../../Component/Board"
 import { useSelector } from 'react-redux'
 
 export default function GamePage() {
-  const switchTimer = useSelector((state) => state.gameMode.switchTimer)
+  const switchTimer = useSelector((state) => state.game.switchTimer)
   const switchCard = useSelector(state => state.gameMode.switchColor)
   useLayoutEffect(() => {
     window.scrollTo({ top: 130, behavior: 'instant' })
@@ -34,9 +34,9 @@ export default function GamePage() {
         <div className="w-full bg-[#1d1d1d]">
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
-            <GameSection_PlayerCard PlayerInfo={['Prithvi', 'India']} switchTimer={switchTimer} reverse={switchCard == 'black' ? true : false} />
+            <GameSection_PlayerCard PlayerInfo={['Prithvi', 'India']} switchTimer={switchTimer} color={'black'} reverse={switchCard == 'black' ? true : false} />
             <Board />
-            <GameSection_PlayerCard PlayerInfo={['Vicky', 'India']} switchTimer={!switchTimer} reverse={switchCard == 'white' ? true : false} />
+            <GameSection_PlayerCard PlayerInfo={['Vicky', 'India']} switchTimer={!switchTimer} color={'white'} reverse={switchCard == 'white' ? true : false} />
           </div>
 
         </div>
@@ -55,7 +55,7 @@ export default function GamePage() {
 }
 
 
-export function GameSection_PlayerCard({ reverse, PlayerInfo, switchTimer }) {
+export function GameSection_PlayerCard({ reverse, PlayerInfo, switchTimer, color }) {
   const [name, country] = PlayerInfo
   const reverseCardCss = 'rounded-b-md'
   return (
@@ -81,7 +81,7 @@ export function GameSection_PlayerCard({ reverse, PlayerInfo, switchTimer }) {
         {/* Rating and Time*/}
         <div className={` px-1 h-full w-full flex flex-col items-center gap-2 ${!reverse && 'justify-end'}`}>
           <div className={`h-8 md:h-6 w-[80%] md:w-[40%] bg-[#3B3B3B] rounded-md ${reverse && 'order-2'} font-bold text-stone-500 flex justify-center items-center`}>1500</div>
-          <div className={`h-10 md:h-8 w-full md:w-[50%] bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md'} flex justify-center items-center`}><Timer toggle={switchTimer} /></div>
+          <div className={`h-10 md:h-8 w-full md:w-[50%] bg-soft-white ${reverse ? reverseCardCss : 'rounded-t-md'} flex justify-center items-center`}><Timer toggle={switchTimer} color={color} /></div>
         </div>
       </div>
     </>
