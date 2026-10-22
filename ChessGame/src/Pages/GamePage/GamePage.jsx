@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect , useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import Logo from "../../Component/Logo"
@@ -34,6 +34,17 @@ export default function GamePage() {
       dispatch(setGameOver({ winner: 'draw', reason: 'Draw by agreement' }))
   }
 
+  const moves = useSelector(state => state.piecesPosition.moves)
+
+  useEffect(() => {
+    if (moves > 0 || gameOver) return          // game already started or finished
+
+    const id = setTimeout(() => {
+      dispatch(setGameOver({ winner: 'draw', reason: 'No move played in 30 seconds' }))
+    }, 30000)
+
+    return () => clearTimeout(id)              // runs when `moves` changes or the page unmounts
+  }, [moves, gameOver])
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
       {gameOver?.winner && (
