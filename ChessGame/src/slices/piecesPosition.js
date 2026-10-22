@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { setTimeOver } from "./Ingame.js";   // same folder as your other slices
 
 const piecesPositionReducer = createSlice({
     name: 'piecesPosition',
@@ -160,6 +161,17 @@ const piecesPositionReducer = createSlice({
             if (state.gameOver) return
             state.gameOver = action.payload
         },
+
+    },
+    extraReducers: (builder) => {
+        builder.addCase(setTimeOver, (state, action) => {
+            if (state.gameOver) return                 // checkmate/draw already happened, keep it
+            const loser = action.payload               // 'white' | 'black', whose clock hit 0
+            state.gameOver = {
+                winner: loser == 'white' ? 'black' : 'white',
+                reason: 'Timeout',
+            }
+        })
     }
 })
 

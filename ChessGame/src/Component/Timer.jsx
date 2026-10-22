@@ -13,10 +13,8 @@ export default function Timer({toggle, color}) {
     function startTimer() {
         if (intervalRef.current !== null) return;
 
-        endTimeRef.current = new Date().getTime() + time * 1000;
-        console.log(endTimeRef.current);
+        endTimeRef.current = new Date().getTime() + time * 1000;        
         
-
         intervalRef.current = setInterval(() => {
             const remaining = Math.max(
                 0,
