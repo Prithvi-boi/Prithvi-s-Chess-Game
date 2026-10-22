@@ -155,7 +155,10 @@ const piecesPositionReducer = createSlice({
         },
 
         evaluateDraw: (state) => { recordAndCheck(state) },
-        setGameOver: (state, action) => { state.gameOver = action.payload },
+        setGameOver: (state, action) => { 
+            if (state.gameOver) return
+            state.gameOver = action.payload 
+        },
     }
 })
 

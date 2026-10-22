@@ -5,9 +5,9 @@ const inGame = createSlice({
     initialState: {
         switchTimer: false,
         whiteTimeOut: false,
-        blackTimeOut: false
+        blackTimeOut: false,
     },
-    reducers:{
+    reducers: {
         setSwitchTimer: (state) => {
             state.switchTimer = !state.switchTimer
         },
@@ -17,11 +17,11 @@ const inGame = createSlice({
             if (color == 'white') {
                 state.whiteTimeOut = true
                 console.log(state.whiteTimeOut, state.blackTimeOut, 'black wins')
-            }else if (color == 'black'){
+            } else if (color == 'black') {
                 state.blackTimeOut = true
                 console.log(state.whiteTimeOut, state.blackTimeOut, 'white wins')
             }
-        }
+        },
     }
 })
 

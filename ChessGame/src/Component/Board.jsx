@@ -30,7 +30,7 @@ import DefaultPieces from "./Pieces/DefaultPieces.jsx"
     Main Game Function (Board)
 ---------------------------------*/
 
-function Board({ playAs = 'white', gameOverCallback }) {
+function Board({ playAs = 'white' }) {
 
   const dispatch = useDispatch()
 
@@ -148,9 +148,7 @@ function Board({ playAs = 'white', gameOverCallback }) {
   //____________ Game Over and Draw Logic ____________ //
   //////////////////////////////////////////////////////
   useEffect(() => {
-    dispatch(markCheckMate(enemy))
-    if (gameOver) {gameOverCallback(switchBoard, 'Checkmate!')}
-    if (gameOver) setTimeout(() => alert(gameOver), 100)
+    if (gameOver?.reason === 'Checkmate') dispatch(markCheckMate(enemy))
   }, [gameOver])
 
   useEffect(() => {
@@ -158,11 +156,10 @@ function Board({ playAs = 'white', gameOverCallback }) {
     if (promotion[0] != null) return
     if (hasLegalMove(Turn, lastMoveRef.current)) return
 
-    dispatch(setGameOver(
-      checkedSquare
-        ? `Checkmate! ${Turn == 'W' ? 'Black' : 'White'} wins`
-        : 'Stalemate! Draw'
-    ))
+    dispatch(setGameOver({
+      winner: Turn == 'W' ? 'black' : 'white',   // Turn is the side that got mated
+      reason: 'Checkmate',
+    }))
   }, [pieces, Turn, promotion])
 
   useEffect(() => {

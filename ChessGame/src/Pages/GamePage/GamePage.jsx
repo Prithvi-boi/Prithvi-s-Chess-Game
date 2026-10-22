@@ -13,7 +13,6 @@ import Board from "../../Component/Board"
 
 import { useSelector } from 'react-redux'
 import GameOver from '../../Component/GameOver'
-import { useState } from 'react'
 
 export default function GamePage() {
   const switchTimer = useSelector((state) => state.game.switchTimer)
@@ -22,15 +21,12 @@ export default function GamePage() {
     window.scrollTo({ top: 130, behavior: 'instant' })
   }, [])
   const navigate = useNavigate()
-  const [gameOver, setgameOver] = useState(false)
-  const [gameOverCard, setgameOverCard] = useState(null)
-  const handleGameOver = (whoWon, reason) => {
-    setgameOver(true)
-    setgameOverCard(<GameOver whoWon={whoWon} reason={reason} exitNav={navigate}/>)
-  }
+  const gameOver = useSelector(state => state.piecesPosition.gameOver)
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
-      {gameOver && gameOverCard}
+      {gameOver?.winner && (
+        <GameOver winner={gameOver.winner} reason={gameOver.reason} exitNav={navigate} />
+      )}
       {/* Heading and Navigation */}
       <div className="flex justify-between p-5 lg:px-50 lg:py-0">
         <Logo style={"mr-auto text-[25px] lg:text-[30px]  xl:pl-50"} />
@@ -44,7 +40,7 @@ export default function GamePage() {
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
             <GameSection_PlayerCard PlayerInfo={['Prithvi', 'India']} switchTimer={switchTimer} color={'black'} reverse={switchCard == 'black' ? true : false} />
-            <Board gameOverCallback={handleGameOver}/>
+            <Board/>
             <GameSection_PlayerCard PlayerInfo={['Vicky', 'India']} switchTimer={!switchTimer} color={'white'} reverse={switchCard == 'white' ? true : false} />
           </div>
 
