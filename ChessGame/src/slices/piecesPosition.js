@@ -85,10 +85,10 @@ const piecesPositionReducer = createSlice({
                 const element = state.value[key];
                 if (element.includes(target[0].toLowerCase())) {
                     const j = element.indexOf(target[0].toLowerCase());
-                    if (target[1][1][0] == 'W') {                        
-                        state.whiteCaptures.push('B'+key[5]);
-                    }else{
-                        state.blackCaptures.push('W'+key[5])
+                    if (target[1][1][0] == 'W') {
+                        state.whiteCaptures.push('B' + key[5]);
+                    } else {
+                        state.blackCaptures.push('W' + key[5])
                     }
                     element[j] = ''
                 }
@@ -155,12 +155,14 @@ const piecesPositionReducer = createSlice({
         },
 
         evaluateDraw: (state) => { recordAndCheck(state) },
-        setGameOver: (state, action) => { 
+
+        setGameOver: (state, action) => {
             if (state.gameOver) return
-            state.gameOver = action.payload 
+            state.gameOver = action.payload
         },
     }
 })
+
 
 const isInsufficient = (value) => {
     const minors = []
@@ -192,9 +194,12 @@ const recordAndCheck = (state) => {
     const k = positionKey(state)
     state.history[k] = (state.history[k] || 0) + 1
 
-    if (isInsufficient(state.value)) state.gameOver = 'Draw: insufficient material'
-    else if (state.history[k] >= 3) state.gameOver = 'Draw: threefold repetition'
-    else if (state.halfMove >= 100) state.gameOver = 'Draw: 50-move rule'
+    if (isInsufficient(state.value))
+        state.gameOver = { winner: 'draw', reason: 'Insufficient material' }
+    else if (state.history[k] >= 3)
+        state.gameOver = { winner: 'draw', reason: 'Threefold repetition' }
+    else if (state.halfMove >= 100)
+        state.gameOver = { winner: 'draw', reason: '50-move rule' }
 }
 
 export default piecesPositionReducer.reducer

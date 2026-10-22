@@ -156,10 +156,11 @@ function Board({ playAs = 'white' }) {
     if (promotion[0] != null) return
     if (hasLegalMove(Turn, lastMoveRef.current)) return
 
-    dispatch(setGameOver({
-      winner: Turn == 'W' ? 'black' : 'white',   // Turn is the side that got mated
-      reason: 'Checkmate',
-    }))
+    if (checkedSquare) {
+      dispatch(setGameOver({ winner: Turn == 'W' ? 'black' : 'white', reason: 'Checkmate' }))
+    } else {
+      dispatch(setGameOver({ winner: 'draw', reason: 'Stalemate' }))
+    }
   }, [pieces, Turn, promotion])
 
   useEffect(() => {

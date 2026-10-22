@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useLayoutEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 import Logo from "../../Component/Logo"
 import ExitIcon from "../../Assets/Icons/Navigation Icons/Exit Icon.svg?react"
@@ -13,6 +14,7 @@ import Board from "../../Component/Board"
 
 import { useSelector } from 'react-redux'
 import GameOver from '../../Component/GameOver'
+import { setGameOver } from '../../slices/piecesPosition'
 
 export default function GamePage() {
   const switchTimer = useSelector((state) => state.game.switchTimer)
@@ -22,6 +24,16 @@ export default function GamePage() {
   }, [])
   const navigate = useNavigate()
   const gameOver = useSelector(state => state.piecesPosition.gameOver)
+
+  const dispatch = useDispatch()
+
+  const offerDraw = () => {
+    if (gameOver) return
+    // local 2-player: the other person agrees on the same screen
+    if (window.confirm('Opponent, do you accept the draw?'))
+      dispatch(setGameOver({ winner: 'draw', reason: 'Draw by agreement' }))
+  }
+
   return (
     <div className={`flex flex-col gap-5 mt-10 xl:gap-9`}>
       {gameOver?.winner && (
@@ -40,7 +52,7 @@ export default function GamePage() {
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
             <GameSection_PlayerCard PlayerInfo={['Prithvi', 'India']} switchTimer={switchTimer} color={'black'} reverse={switchCard == 'black' ? true : false} />
-            <Board/>
+            <Board />
             <GameSection_PlayerCard PlayerInfo={['Vicky', 'India']} switchTimer={!switchTimer} color={'white'} reverse={switchCard == 'white' ? true : false} />
           </div>
 
@@ -49,7 +61,7 @@ export default function GamePage() {
           {/* Buttons */}
           <div className="grid grid-cols-2 gap-4 px-10 sm:order-2 w-full">
             <button className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><ResignIcon /> Resign</button>
-            <button className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><DrawIcon /> Draw</button>
+            <button onClick={offerDraw} className="text-soft-white rounded-md bg-stone-600 h-10 flex justify-center items-center gap-2"><DrawIcon /> Draw</button>
           </div>
           {/* Moves Tracker */}
           <MovesTracker></MovesTracker>

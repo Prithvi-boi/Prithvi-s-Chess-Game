@@ -2,16 +2,20 @@
 import White_Pawn from '../Assets/Default Chess Pieces/White_Pawn.svg?react'
 import Black_Pawn from '../Assets/Default Chess Pieces/Black_Pawn.svg?react'
 
-function GameOver({ winner = 'error', reason = 'error', exitNav }) {
+function GameOver({ winner = 'draw', reason = '', exitNav }) {
     const svgstyle = 'h-12 w-12'
-    const svg = winner != 'white' ? <White_Pawn className={svgstyle} /> : <Black_Pawn className={svgstyle} />
+    const isDraw = winner == 'draw'
+    const title = isDraw ? 'Draw!' : `${winner.charAt(0).toUpperCase() + winner.slice(1)} Won!`
+        const svg = isDraw
+        ? <></>
+        : winner == 'white' ? <White_Pawn className={svgstyle} /> : <Black_Pawn className={svgstyle} />
     return (
         <div className='fixed h-screen w-screen bg-[#000000b6] z-99 -mt-10 flex justify-center items-center'>
             <div className='flex flex-col gap-2 items-center h-120 w-100 bg-background rounded-2xl p-5'>
                 <div className='flex items-center'>
                     {svg}
                     <h2 className='text-white font-extrabold text-4xl'>
-                        {winner.charAt(0).toUpperCase() + winner.slice(1)} Won!
+                        {title}
                     </h2>
                 </div>
 
