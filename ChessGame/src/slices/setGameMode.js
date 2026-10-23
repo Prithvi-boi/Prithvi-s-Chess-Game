@@ -8,8 +8,8 @@ const gameModeReducer = createSlice({
         switchPlay: false,
         switchColor: 'white',
         names:{
-            player1: 'Guest 1',
-            player2: 'Guest 2'
+            player1: 'player 1',
+            player2: 'player 2'
         }
     },
     reducers:{
