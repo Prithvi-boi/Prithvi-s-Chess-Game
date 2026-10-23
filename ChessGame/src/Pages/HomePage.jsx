@@ -95,7 +95,7 @@ function PlayOffline_Section() {
             <div className="rounded-md h-full w-full bg-bg-dark p-3 px-4 xl:py-10 xl:px-10 flex flex-col gap-5 text-[#848484]">
                 <h2 className="text-[#848484]text-xl">Game modes</h2>
                 <hr />
-                <div className="grid grid-cols-3 grid-rows-2 gap-2 text-white">
+                <div className="grid grid-cols-3 grid-rows-1 gap-2 text-white">
                     <div onClick={()=> dispatch(setGameMode('rapid'))} className={`${gameMode == 'rapid' && selectedCss}`}>
                         <BoxCard Icon={<StopwatchIcon />} title={"Rapid"}>
                             <div className="rounded-sm border-2 px-1 sm:px-6 lg:px-10 border-[#989696] bg-[#838383]">10 min</div>
@@ -109,11 +109,6 @@ function PlayOffline_Section() {
                     <div onClick={()=> dispatch(setGameMode('bullet'))} className={`${gameMode == 'bullet' && selectedCss}`}>
                         <BoxCard Icon={<BulletIcon />} title={"Bullet"}>
                             <div className="rounded-sm border-2 px-1 sm:px-6 lg:px-10 border-[#989696] bg-[#838383]">1 min</div>
-                        </BoxCard>
-                    </div>
-                    <div onClick={()=> dispatch(setGameMode('custom'))} className={`${gameMode == 'custom' && selectedCss} col-span-3`}>
-                        <BoxCard Icon={<SettingIcon/>} title={"Custom"}>
-                            <input type="number" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Value (in Min)"/>
                         </BoxCard>
                     </div>
                 </div>
