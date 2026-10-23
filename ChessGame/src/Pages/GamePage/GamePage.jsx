@@ -17,6 +17,7 @@ import GameOver from '../../Component/GameOver'
 import { setGameOver } from '../../slices/piecesPosition'
 
 export default function GamePage() {
+  const playerNames = useSelector((state) => state.gameMode.names)
   const switchTimer = useSelector((state) => state.game.switchTimer)
   const switchCard = useSelector(state => state.gameMode.switchColor)
   useLayoutEffect(() => {
@@ -62,9 +63,9 @@ export default function GamePage() {
         <div className="w-full bg-[#1d1d1d]">
           {/* Game Section */}
           <div className="grid grid-cols-1 grid-rows-[1fr_auto_1fr] place-items-center">
-            <GameSection_PlayerCard PlayerInfo={['Prithvi', 'India']} switchTimer={switchTimer} color={'black'} reverse={switchCard == 'black' ? true : false} />
+            <GameSection_PlayerCard PlayerInfo={[playerNames.player1, 'India']} switchTimer={switchTimer} color={'black'} reverse={switchCard == 'black' ? true : false} />
             <Board />
-            <GameSection_PlayerCard PlayerInfo={['Vicky', 'India']} switchTimer={!switchTimer} color={'white'} reverse={switchCard == 'white' ? true : false} />
+            <GameSection_PlayerCard PlayerInfo={[playerNames.player2, 'India']} switchTimer={!switchTimer} color={'white'} reverse={switchCard == 'white' ? true : false} />
           </div>
 
         </div>

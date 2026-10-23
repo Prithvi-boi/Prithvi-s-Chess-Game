@@ -6,7 +6,11 @@ const gameModeReducer = createSlice({
         value: 'rapid',
         playas: 'white',
         switchPlay: false,
-        switchColor: 'white'
+        switchColor: 'white',
+        names:{
+            player1: 'Guest 1',
+            player2: 'Guest 2'
+        }
     },
     reducers:{
         setGameMode: (state,action) => {
@@ -20,9 +24,17 @@ const gameModeReducer = createSlice({
         },
         setswitchBoard: (state) => {
             state.switchColor = state.switchColor == 'white' ? 'black' : 'white'
+        },
+        setPlayerName: (state,action) => {
+            const [index, name] = action.payload
+            const key = index == 1 ? 'player1' : 'player2'
+            state.names[key] = name.trim()
+        },
+        switchPlayers:(state) => {
+            [state.names.player2, state.names.player1] = [state.names.player1, state.names.player2]
         }
     }
 })
 
 export default gameModeReducer.reducer
-export const { setGameMode, setPlayAs, setSwitchPlay, setswitchBoard } = gameModeReducer.actions
+export const { setGameMode, setPlayAs, setSwitchPlay, setswitchBoard, setPlayerName, switchPlayers } = gameModeReducer.actions

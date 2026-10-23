@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { setGameMode, setPlayAs, setSwitchPlay } from "../slices/setGameMode.js"
+import { setGameMode, setPlayAs, setSwitchPlay, setPlayerName, switchPlayers } from "../slices/setGameMode.js"
 
 import ChessLogo from "../../public/Downloads/ChessLogo.png"
 import Button from "../Component/Button.jsx"
@@ -122,22 +122,22 @@ function PlayOffline_Section() {
                     <BoxCard Icon={<UsersIcon/>} title={"Player Names"} styles={'col-span-3 items-start px-5 text-sm text-white w-full' }>
                         <div className="flex gap-4 items-center">
                             <p>Player 1:</p>
-                            <input type="text" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Player 1 name"/>
+                            <input onChange={(e) => dispatch(setPlayerName([1, e.target.value]))} type="text" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Player 1 name"/>
                         </div>
                         <div className="flex gap-4 items-center">
                             <p>Player 2:</p>
-                            <input type="text" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Player 2 name"/>
+                            <input onChange={(e) => dispatch(setPlayerName([2, e.target.value]))} type="text" className="bg-[#272727] border-2 border-[#989696] rounded-md p-2 text-[0.7em]" placeholder="Enter Player 2 name"/>
                         </div>
                     </BoxCard>
 
                     <BoxCard Icon={<SettingIcon/>} title={"Play as"} styles={'col-span-3 items-start px-5 text-sm text-white w-full' }>
                         <div className="grid grid-cols-2 grid-rows-2 w-full gap-x-2 place-items-center">
                             <div className={`h-10 w-full rounded-xl grid grid-cols-2 bg-white text-gray-600`}>
-                                <button onClick={() => dispatch(setPlayAs('black'))} className={`bg-black rounded-l-xl relative`}>
-                                    {PlayingAs ==='white' && <div className="bg-[#272727] rounded-l-xl w-full h-full absolute -top-2 "></div>}
+                                <button onClick={() => { dispatch(setPlayAs('white')) , dispatch(switchPlayers())}} className={`bg-black rounded-l-xl relative`}>
+                                    {PlayingAs ==='black' && <div className="bg-[#272727] rounded-l-xl w-full h-full absolute -top-2 "></div>}
                                 </button>
-                                <button onClick={() => dispatch(setPlayAs('white'))} className={`bg-[#cecece] rounded-r-xl relative`}>
-                                    {PlayingAs ==='black' && <div className=" bg-white rounded-r-xl w-full h-full absolute -top-2 "></div>}
+                                <button onClick={() => {dispatch(setPlayAs('black')), dispatch(switchPlayers())}} className={`bg-[#cecece] rounded-r-xl relative`}>
+                                    {PlayingAs ==='white' && <div className=" bg-white rounded-r-xl w-full h-full absolute -top-2 "></div>}
                                 </button>
                             </div>
                             <div className={`h-10 w-full rounded-xl grid place-items-center ${PlayingAs === 'white' ? 'bg-white text-gray-600': 'bg-black text-gray-400'} `}>{PlayingAs}</div>
